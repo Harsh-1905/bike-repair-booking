@@ -21,10 +21,11 @@ const BookingTable = ({ isCollapsed }) => {
 
     return (
         <div style={{ marginLeft: isCollapsed ? '80px' : '250px', padding: '20px', transition: 'margin-left 0.3s ease' }}>
+            <style>{`.bookingTable table tbody tr:hover { background-color: #f0f5ff;cursor: pointer;transform: scale(1.01);transition: transform 0.2s ease, background-color 0.2s ease;}`}</style>
             <div className="bookingTable">
                 <h2 className="text-center mb-4">Bookings</h2>
-                <table className="table table-bordered">
-                    <thead className="table-dark text-center">
+                <table className="table table-hover">
+                    <thead className="table-dark text-center ">
                         <tr>
                             <th>S.no</th>
                             <th>User Name</th>
@@ -43,7 +44,7 @@ const BookingTable = ({ isCollapsed }) => {
                                 <td>{booking.bike_name}</td>
                                 <td>{booking.bike_numplate}</td>
                                 <td>{new Date(booking.date_time).toLocaleString()}</td>
-                                <td>{serviceMap[booking.service_id] || booking.service_id}</td>
+                                <td>{serviceMap[booking.bike_services] || booking.bike_services}</td>
                                 <td>{booking.status}</td>
                             </tr>
                         )) : (

@@ -18,11 +18,12 @@ const ContactUsAdmin = ({ isCollapsed }) => {
     useEffect(() => { fetchContacts(); }, []);
 
     return (
-        <div style={{ marginLeft: isCollapsed ? '80px' : '250px', padding: '20px', transition: 'margin-left 0.3s ease' }}>
+        <div style={{ marginLeft: isCollapsed ? '80px' : '250px', padding: '20px', transition: 'margin-left 0.3s ease', overflow: 'hidden' }}>
+            <style>{` table tbody tr:hover { background-color: #f0f5ff;cursor: pointer;transform: scale(1,1.03);transition: transform 0.2s ease, background-color 0.2s ease;}`}</style>
             <div className="container my-5">
                 <h2 className="text-center mb-4">Contact Messages</h2>
                 <div className="table-responsive">
-                    <table className="table table-bordered table-hover">
+                    <table className="table table-hover">
                         <thead className="table-dark text-center">
                             <tr>
                                 <th>Sno</th>

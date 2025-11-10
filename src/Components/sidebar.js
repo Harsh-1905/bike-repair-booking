@@ -64,17 +64,10 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
         >
             <div className="text-white text-center mb-4 pt-2 d-flex align-items-center justify-content-between">
                 {!isCollapsed && (
-                    <Link className="text-decoration-none text-white fs-5 fw-bold" to="/">
+                    <Link className="text-decoration-none text-white fs-5 fw-bold align-text-center" >
                         <span style={{ color: '#E43636' }}>Admin</span>Page
                     </Link>
                 )}
-                <button
-                    className="btn btn-sm text-white"
-                    onClick={toggleSidebar}
-                    style={{ marginLeft: isCollapsed ? 'auto' : '0', marginRight: isCollapsed ? 'auto' : '0' }}
-                >
-                    <FontAwesomeIcon icon={isCollapsed ? faBars : faTimes} size="lg" />
-                </button>
             </div>
 
             <hr className="text-white-50" />
@@ -90,8 +83,6 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
             <hr className="text-white-50" />
 
             <ul className="nav nav-pills flex-column mb-auto">
-                <SidebarItem icon={faSignIn} text="Sign In" to="/signin" isActive={activePath === '/signin'} isCollapsed={isCollapsed} />
-                <SidebarItem icon={faUserPlus} text="Sign Up" to="/signup" isActive={activePath === '/signup'} isCollapsed={isCollapsed} />
                 <li className="nav-item mb-2">
                     <button
                         onClick={handleLogout}
@@ -111,10 +102,6 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
                     </button>
                 </li>
             </ul>
-
-            <div className="mt-auto py-2 text-center text-white fw-bold" style={{ backgroundColor: '#1c1c3f', textTransform: 'uppercase', letterSpacing: isCollapsed ? '0px' : '2px', transition: 'letter-spacing 0.3s ease' }}>
-                {isCollapsed ? 'ADMIN' : 'ADMIN PANEL'}
-            </div>
         </div>
     );
 };

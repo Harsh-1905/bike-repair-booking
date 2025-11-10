@@ -9,7 +9,10 @@ import {
     getAllBookings,
     createContact,
     getAllContacts,
-    deleteUser
+    deleteUser,
+    getUserBookings,
+    updateBooking,
+    deleteBooking
 } from "../controller/userController.js";
 
 
@@ -37,6 +40,9 @@ route.delete("/user/:id", deleteUser);
 // Bookings
 route.post("/booking", createBooking);
 route.get("/bookings", getAllBookings);
+route.get("/booking/user/:id", getUserBookings);
+route.put("/booking/:id", updateBooking);
+route.delete("/booking/:id", deleteBooking);
 
 // ContactUs
 route.post("/contact", createContact);

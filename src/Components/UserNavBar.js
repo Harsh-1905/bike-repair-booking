@@ -30,6 +30,9 @@ const UserNavBar = ({ user, handleLogout }) => {
                             <Link className="nav-link navlinktexts text-white" aria-current="page" to="/service">Booking</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/history">History</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/profile">Profile</Link>
                         </li>
 

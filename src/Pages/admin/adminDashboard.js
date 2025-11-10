@@ -20,6 +20,12 @@ const StatCard = ({ title, value, icon, bgColor, iconColor }) => (
     </div>
 );
 
+const serviceMap = {
+    1: "General Service",
+    2: "On Road Service",
+    3: "All-Over Service"
+};
+
 const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
     const [bookings, setBookings] = useState([]);
     const [searchTerm, setSearchTerm] = useState('');
@@ -134,7 +140,7 @@ const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
                                                 <td>{booking.bike_name}</td>
                                                 <td>{booking.bike_numplate}</td>
                                                 <td>{new Date(booking.date_time).toLocaleString()}</td>
-                                                <td>{booking.service_id}</td>
+                                                <td>{serviceMap[booking.bike_services]}</td>
                                                 <td>{booking.status}</td>
                                             </tr>
                                         ))

@@ -17,6 +17,7 @@ import BookingTable from './Pages/admin/BookingsTable';
 import Aboutus from './Pages/Users/Aboutus';
 import ContactDetails from './Pages/admin/contactdetails';
 import AdminDashboard from './Pages/admin/adminDashboard';
+import History from './Pages/Users/History';
 import api from './Api/axios';
 function App() {
   const [user, setUser] = useState(null);
@@ -60,6 +61,7 @@ function App() {
         <Route path="/aboutus" element={<Aboutus />} />
         <Route path="/contactdetails" element={<ContactDetails />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
+        <Route path="/history" element={<History />} />
       </Routes>
     </Router>
   );
