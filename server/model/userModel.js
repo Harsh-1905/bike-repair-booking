@@ -35,6 +35,18 @@ const userSchema = new mongoose.Schema({
         enum: ["user", "admin"],
         default: "user"
     },
-    isActive: { type: Boolean, default: true }
+    isActive: {
+        type: Boolean,
+        default: true
+    },
+    resetOtp: {
+        type: String,
+        default: null,
+        select: false
+    },
+    resetOtpExpiry: {
+        type: Date,
+        default: null
+    }
 });
 export default mongoose.model("registration", userSchema)

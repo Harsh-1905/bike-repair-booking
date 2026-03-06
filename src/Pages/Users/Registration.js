@@ -58,9 +58,9 @@ const Registration = () => {
                 if (res.data.success) {
                     showSuccess(res.data.message);
                     clearData();
-                    window.location.href = "/login";
+                    navigate("/signin")
                 } else {
-                    navigate("/login");
+                    showError(res.data.message);
                 }
             })
             .catch((err) => {

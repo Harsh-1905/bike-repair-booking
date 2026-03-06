@@ -75,7 +75,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
             <ul className="nav nav-pills flex-column mb-auto">
                 <SidebarItem icon={faHome} text="Dashboard" to="/adminDashboard" isActive={activePath === '/adminDashboard'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUsers} text="User Details" to="/userData" isActive={activePath === '/userData'} isCollapsed={isCollapsed} />
-                <SidebarItem icon={faCalendarCheck} text="Bookings Table" to="/bookingstable" isActive={activePath === '/bookingstable'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faCalendarCheck} text="Booking Details" to="/bookingstable" isActive={activePath === '/bookingstable'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faAddressBook} text="Contact Details" to="/contactdetails" isActive={activePath === '/contactdetails'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserCircle} text="Profile" to="/profile" isActive={activePath === '/profile'} isCollapsed={isCollapsed} />
             </ul>

@@ -8,10 +8,8 @@ import Login from './Pages/Users/Login';
 import Booking from './Pages/Booking';
 import Contactus from './Pages/Users/Contactus';
 import { ToastContainer } from 'react-toastify';
-import Dashboard from './Pages/Users/Dashboard';
 import { useEffect, useState } from 'react';
 import Profile from './Pages/Users/Profile';
-import Tracking from './Pages/Users/Tracking';
 import UserTable from './Pages/Users/UserTable';
 import BookingTable from './Pages/admin/BookingsTable';
 import Aboutus from './Pages/Users/Aboutus';
@@ -19,6 +17,9 @@ import ContactDetails from './Pages/admin/contactdetails';
 import AdminDashboard from './Pages/admin/adminDashboard';
 import History from './Pages/Users/History';
 import api from './Api/axios';
+import Forgot_Password from './Pages/Users/forgot_password';
+import Reset_Password from './Pages/Users/Reset_Password';
+import Store from './Components/Store/Store';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -53,15 +54,16 @@ function App() {
         <Route path="/signin" element={<Login setUser={setUser} />} />
         <Route path="/service" element={<Booking />} />
         <Route path="/contactus" element={<Contactus />} />
-        <Route path="/userDashboard" element={<Dashboard />} />
         <Route path="/profile" element={<Profile />} />
-        <Route path="/tracking" element={<Tracking />} />
         <Route path="/userData" element={<UserTable />} />
         <Route path="/bookingstable" element={<BookingTable />} />
         <Route path="/aboutus" element={<Aboutus />} />
         <Route path="/contactdetails" element={<ContactDetails />} />
         <Route path="/adminDashboard" element={<AdminDashboard />} />
         <Route path="/history" element={<History />} />
+        <Route path="/forgotpassword" element={<Forgot_Password />} />
+        <Route path="/resetpassword" element={<Reset_Password />} />
+        <Route path="/store" element={<Store />} />
       </Routes>
     </Router>
   );

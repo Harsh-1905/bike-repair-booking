@@ -103,7 +103,7 @@ const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
                 {/* Stats Cards */}
                 <div className="row g-4">
                     <StatCard title="Total Bookings" value={bookings.length} icon={faEye} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
-                    <StatCard title="Active Customers" value="85+" icon={faThumbsUp} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
+                    <StatCard title="Active Customers" value="10+" icon={faThumbsUp} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
                     <StatCard title="Trained Mechanics" value="5" icon={faCommentDots} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
                     <StatCard title="Years of Experience" value="20+" icon={faCheckCircle} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
                 </div>
