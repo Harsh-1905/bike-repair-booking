@@ -19,7 +19,7 @@ const Navbar = () => {
                             <Link className="nav-link navlinktexts text-white" to="/userData">User Details</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link navlinktexts text-white" to="/bookingstable">Bookings Table</Link>
+                            <Link className="nav-link navlinktexts text-white" to="/bookingstable">Booking Details</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/contactdetails">Contact Details</Link>

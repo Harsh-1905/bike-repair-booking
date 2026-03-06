@@ -69,7 +69,6 @@ const Home = () => {
                 <div className="container">
                     <h2 className="mb-4" style={{ color: "#E43636" }}>Ready to Get Started?</h2>
                     <p className="mb-4">Book your bike service online in just a few clicks!</p>
-                    <a href="#book" className="btn btn-lg" style={{ backgroundColor: "#E43636", color: "#FFF" }}>Book Now</a>
                 </div>
             </section>
 

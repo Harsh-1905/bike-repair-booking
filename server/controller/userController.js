@@ -1,6 +1,7 @@
 import User from "../model/userModel.js";
 import Booking from "../model/bookModel.js";
 import Contact from "../model/contactmodel.js";
+import bcrypt from "bcryptjs";
 
 export const create = async (req, res) => {
     try {
@@ -58,18 +59,25 @@ export const login = async (req, res) => {
         // check user
         const user = await User.findOne({ email });
         if (!user) {
-            return res.status(404).json({ success: false, message: "User not found" });
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
         }
 
-        // check password (plain for now, later hash with bcrypt)
-        if (user.password !== password) {
-            return res.status(401).json({ success: false, message: "Invalid credentials" });
+        // ✅ compare plain password with hashed password
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(401).json({
+                success: false,
+                message: "Invalid credentials"
+            });
         }
 
         // hide password
         const { password: pwd, ...userWithoutPassword } = user.toObject();
 
-        // ✅ Save session
+        // save session
         req.session.user = userWithoutPassword;
 
         res.status(200).json({
@@ -77,10 +85,15 @@ export const login = async (req, res) => {
             message: "Login successful",
             user: userWithoutPassword
         });
+
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({
+            success: false,
+            message: error.message
+        });
     }
 };
+
 
 // Get a single user by ID
 export const getUser = async (req, res) => {

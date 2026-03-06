@@ -35,7 +35,9 @@ const UserNavBar = ({ user, handleLogout }) => {
                         <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/profile">Profile</Link>
                         </li>
-
+                        <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" to="/store">Store</Link>
+                        </li>
                         {/* Dropdown for auth links */}
                         <li className="nav-item dropdown">
                             <a className="nav-link dropdown-toggle navlinktexts text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">

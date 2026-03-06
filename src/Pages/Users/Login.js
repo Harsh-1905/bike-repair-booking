@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from '../../Api/axios';
 import { showError, showSuccess } from "../../utils/toast";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 
 const Login = ({ setUser }) => {
     const [emailID, setEmailID] = useState("");
@@ -90,6 +90,10 @@ const Login = ({ setUser }) => {
                         Sign IN
                     </button>
                 </div>
+                <Link to="/forgotpassword" className="text-decoration-none">
+                    Forgot Password?
+                </Link>
+
             </div>
         </div>
     );

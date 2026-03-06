@@ -41,7 +41,7 @@ const AboutUs = () => {
                 <div className="container">
                     <h2 className="mb-4" style={{ color: "#E43636" }}>Want to Experience Our Services?</h2>
                     <p className="mb-4">Book your bike repair easily and experience the quality!</p>
-                    <a href="/service" className="btn btn-lg" style={{ backgroundColor: "#E43636", color: "#FFF" }}>Book Now</a>
+                    <a href="/signup" className="btn btn-lg" style={{ backgroundColor: "#E43636", color: "#FFF" }}>Book Now</a>
                 </div>
             </section>
 

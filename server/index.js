@@ -1,11 +1,15 @@
+import "dotenv/config";
+console.log("ENV TEST PORT:", process.env.PORT);
+console.log("ENV TEST MAILTRAP:", process.env.MAILTRAP_HOST);
+
 import express from "express";
 import cors from "cors";
 import mongoose from "mongoose";
 import route from "./route/userRoute.js";
-import dotenv from "dotenv";
 import session from "express-session"; // ✅ import session
+import passwordRoutes from "./route/passwordRoute.js";
 
-dotenv.config();
+
 const app = express();
 
 // ✅ Allow frontend requests
@@ -39,3 +43,5 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
+app.use("/api", passwordRoutes);
+
