@@ -5,7 +5,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './Pages/Users/Home';
 import Registration from './Pages/Users/Registration';
 import Login from './Pages/Users/Login';
-import Booking from './Pages/Booking';
+import Booking from './Pages/Users/Booking';
 import Contactus from './Pages/Users/Contactus';
 import { ToastContainer } from 'react-toastify';
 import { useEffect, useState } from 'react';
@@ -20,6 +20,9 @@ import api from './Api/axios';
 import Forgot_Password from './Pages/Users/forgot_password';
 import Reset_Password from './Pages/Users/Reset_Password';
 import Store from './Components/Store/Store';
+import ServiceSelection from './Pages/Users/Service_selection';
+import CustomizeSelection from './Pages/Users/CustomizeSelection';
+import UserHome from './Pages/Users/UserHomepage';
 function App() {
   const [user, setUser] = useState(null);
 
@@ -64,6 +67,10 @@ function App() {
         <Route path="/forgotpassword" element={<Forgot_Password />} />
         <Route path="/resetpassword" element={<Reset_Password />} />
         <Route path="/store" element={<Store />} />
+        <Route path="/serviceselection" element={<ServiceSelection />} />
+        <Route path="/booking" element={<Booking />} />
+        <Route path="/customselection" element={<CustomizeSelection />} />
+        <Route path="/userhomepage" element={<UserHome />} />
       </Routes>
     </Router>
   );

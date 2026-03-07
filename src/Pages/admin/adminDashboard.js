@@ -1,15 +1,23 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faThumbsUp, faCommentDots, faCheckCircle, faSearch, faBars } from '@fortawesome/free-solid-svg-icons';
-import api from '../../Api/axios'; // adjust path
+import {
+    faEye,
+    faThumbsUp,
+    faCommentDots,
+    faCheckCircle,
+    faSearch,
+    faBars
+} from '@fortawesome/free-solid-svg-icons';
 
-// Stats Card component
-const StatCard = ({ title, value, icon, bgColor, iconColor }) => (
+import api from '../../Api/axios';
+
+const StatCard = ({ title, value, icon, bgColor }) => (
     <div className="col-md-3 col-sm-6 mb-4">
-        <div className={`card shadow-sm p-3 border-0 rounded-4`} style={{ backgroundColor: bgColor || '#6c757d' }}>
+        <div className="card shadow-sm p-3 border-0 rounded-4"
+            style={{ backgroundColor: bgColor }}>
             <div className="d-flex align-items-center">
                 <div className="me-3">
-                    <FontAwesomeIcon icon={icon} size="2x" style={{ color: iconColor || 'white' }} />
+                    <FontAwesomeIcon icon={icon} size="2x" color="white" />
                 </div>
                 <div>
                     <h5 className="mb-0 text-white fw-bold">{value}</h5>
@@ -20,139 +28,272 @@ const StatCard = ({ title, value, icon, bgColor, iconColor }) => (
     </div>
 );
 
-const serviceMap = {
-    1: "General Service",
-    2: "On Road Service",
-    3: "All-Over Service"
-};
-
 const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
-    const [bookings, setBookings] = useState([]);
-    const [searchTerm, setSearchTerm] = useState('');
-    const [filteredBookings, setFilteredBookings] = useState([]);
 
-    // Sidebar widths
-    const openWidth = '250px';
-    const collapsedWidth = '80px';
+    const [bookings, setBookings] = useState([]);
+    const [filteredBookings, setFilteredBookings] = useState([]);
+    const [searchTerm, setSearchTerm] = useState('');
+
+    const openWidth = "250px";
+    const collapsedWidth = "80px";
 
     const mainContentStyle = {
-        minHeight: '100vh',
-        backgroundColor: '#f0f2f5',
+        minHeight: "100vh",
+        backgroundColor: "#f0f2f5",
         marginLeft: isCollapsed ? collapsedWidth : openWidth,
-        transition: 'margin-left 0.3s ease',
+        transition: "margin-left 0.3s ease"
     };
 
-    // Fetch all bookings on mount
     useEffect(() => {
+
         const fetchBookings = async () => {
+
             try {
-                const res = await api.get('/bookings'); // backend route
+
+                const res = await api.get("/bookings");
+
                 if (res.data.success) {
                     setBookings(res.data.data);
                     setFilteredBookings(res.data.data);
                 }
+
             } catch (err) {
-                console.error('Error fetching bookings:', err);
+                console.error(err);
             }
+
         };
+
         fetchBookings();
+
     }, []);
 
-    // Update filtered bookings as user types
     useEffect(() => {
-        if (searchTerm.trim() === '') {
+
+        if (searchTerm.trim() === "") {
+
             setFilteredBookings(bookings);
+
         } else {
+
             setFilteredBookings(
                 bookings.filter(b =>
-                    (b.bike_name && b.bike_name.toLowerCase().includes(searchTerm.toLowerCase())) ||
-                    (b.bike_numplate && b.bike_numplate.toLowerCase().includes(searchTerm.toLowerCase()))
+                    (b.bikeCompany &&
+                        b.bikeCompany.toLowerCase().includes(searchTerm.toLowerCase())) ||
+
+                    (b.bikeNumPlate &&
+                        b.bikeNumPlate.toLowerCase().includes(searchTerm.toLowerCase()))
                 )
             );
+
         }
+
     }, [searchTerm, bookings]);
 
+    const getStatusClass = (status) => {
+
+        switch (status) {
+
+            case "Pending":
+                return "badge bg-warning text-dark";
+
+            case "Confirmed":
+                return "badge bg-primary";
+
+            case "In Progress":
+                return "badge bg-info";
+
+            case "Completed":
+                return "badge bg-success";
+
+            case "Cancelled":
+                return "badge bg-danger";
+
+            default:
+                return "badge bg-secondary";
+
+        }
+
+    };
+
     return (
-        <div className="dashboard-wrapper" style={mainContentStyle}>
-            {/* Top Navbar */}
-            <nav className="navbar navbar-expand-lg navbar-light shadow-sm" style={{ backgroundColor: '#ffffff', borderBottom: '1px solid #e0e0e0' }}>
+
+        <div style={mainContentStyle}>
+
+            {/* Navbar */}
+
+            <nav className="navbar navbar-light bg-white shadow-sm">
+
                 <div className="container-fluid">
-                    <button className="navbar-toggler me-3 d-lg-none" type="button" aria-label="Toggle navigation" onClick={toggleSidebar}>
+
+                    <button
+                        className="navbar-toggler d-lg-none"
+                        onClick={toggleSidebar}
+                    >
                         <FontAwesomeIcon icon={faBars} />
                     </button>
-                    <span className="navbar-brand fw-bold text-dark d-none d-lg-block">Search For Bike Here</span>
 
-                    <form className="d-flex mx-auto position-relative" style={{ maxWidth: '400px', flexGrow: 1 }}>
+                    <span className="navbar-brand fw-bold">
+                        Search For Bike
+                    </span>
+
+                    <div className="d-flex mx-auto" style={{ maxWidth: "400px", width: "100%" }}>
+
                         <input
-                            className="form-control me-2 border-0 rounded-pill ps-4"
-                            type="search"
-                            placeholder="Search by bike name..."
+                            className="form-control rounded-pill"
+                            placeholder="Search by bike company or number..."
                             value={searchTerm}
                             onChange={(e) => setSearchTerm(e.target.value)}
-                            aria-label="Search"
-                            style={{ backgroundColor: '#e9ecef' }}
                         />
-                        <button className="btn position-absolute end-0 top-50 translate-middle-y me-2" type="button" style={{ color: '#4CAF50' }}>
+
+                        <button className="btn">
                             <FontAwesomeIcon icon={faSearch} />
                         </button>
-                    </form>
+
+                    </div>
+
                 </div>
+
             </nav>
 
             <div className="container-fluid mt-4 px-4">
-                {/* Stats Cards */}
-                <div className="row g-4">
-                    <StatCard title="Total Bookings" value={bookings.length} icon={faEye} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
-                    <StatCard title="Active Customers" value="10+" icon={faThumbsUp} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
-                    <StatCard title="Trained Mechanics" value="5" icon={faCommentDots} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
-                    <StatCard title="Years of Experience" value="20+" icon={faCheckCircle} bgColor="#E43636" iconColor="rgba(255,255,255,0.7)" />
+
+                {/* Stats */}
+
+                <div className="row">
+
+                    <StatCard
+                        title="Total Bookings"
+                        value={bookings.length}
+                        icon={faEye}
+                        bgColor="#E43636"
+                    />
+
+                    <StatCard
+                        title="Active Customers"
+                        value="10+"
+                        icon={faThumbsUp}
+                        bgColor="#E43636"
+                    />
+
+                    <StatCard
+                        title="Trained Mechanics"
+                        value="5"
+                        icon={faCommentDots}
+                        bgColor="#E43636"
+                    />
+
+                    <StatCard
+                        title="Years Experience"
+                        value="20+"
+                        icon={faCheckCircle}
+                        bgColor="#E43636"
+                    />
+
                 </div>
 
-                {/* Search Results Table */}
-                <div className="card shadow-sm rounded-4 mt-4 mb-4">
-                    <div className="card-header border-0 bg-transparent pt-3 pb-2">
-                        <h5 className="mb-0 fw-bold" style={{ color: '#333' }}>Bookings</h5>
+
+                {/* Booking Table */}
+
+                <div className="card shadow-sm rounded-4 mt-4">
+
+                    <div className="card-header bg-transparent border-0">
+                        <h5 className="fw-bold">Bookings</h5>
                     </div>
-                    <div className="card-body p-0">
-                        <div className="table-responsive">
-                            <table className="table table-hover mb-0">
-                                <thead style={{ backgroundColor: '#f8f9fa' }}>
+
+                    <div className="table-responsive">
+
+                        <table className="table table-hover mb-0">
+
+                            <thead className="table-light">
+
+                                <tr>
+                                    <th>S.no</th>
+                                    <th>User</th>
+                                    <th>Bike</th>
+                                    <th>Number Plate</th>
+                                    <th>Service</th>
+                                    <th>Price</th>
+                                    <th>Date</th>
+                                    <th>Status</th>
+                                </tr>
+
+                            </thead>
+
+                            <tbody>
+
+                                {filteredBookings.length === 0 ? (
+
                                     <tr>
-                                        <th scope="col" className="text-muted border-0 py-3 ps-4">S.no</th>
-                                        <th scope="col" className="text-muted border-0 py-3">User Name</th>
-                                        <th scope="col" className="text-muted border-0 py-3">Bike Name</th>
-                                        <th scope="col" className="text-muted border-0 py-3">Number Plate</th>
-                                        <th scope="col" className="text-muted border-0 py-3">Date & Time</th>
-                                        <th scope="col" className="text-muted border-0 py-3">Service</th>
-                                        <th scope="col" className="text-muted border-0 py-3">Status</th>
+                                        <td colSpan="8" className="text-center">
+                                            No bookings found
+                                        </td>
                                     </tr>
-                                </thead>
-                                <tbody>
-                                    {filteredBookings.length === 0 ? (
-                                        <tr>
-                                            <td colSpan="7" className="text-center">No bookings found</td>
+
+                                ) : (
+
+                                    filteredBookings.map((b, index) => (
+
+                                        <tr key={b._id}>
+
+                                            <td>{index + 1}</td>
+
+                                            <td>
+                                                {b.user_id
+                                                    ? `${b.user_id.firstName} ${b.user_id.lastName}`
+                                                    : "N/A"}
+                                            </td>
+
+                                            <td>
+                                                {b.bikeCompany} {b.bikeModel}
+                                            </td>
+
+                                            <td>
+                                                {b.bikeNumPlate}
+                                            </td>
+
+                                            <td>
+                                                {b.selectedServices?.length > 0
+                                                    ? b.selectedServices.join(", ")
+                                                    : b.bikeService}
+                                            </td>
+
+
+                                            <td>
+                                                ₹{b.price}
+                                            </td>
+
+                                            <td>
+                                                {new Date(b.date).toLocaleDateString()}
+                                            </td>
+
+                                            <td>
+
+                                                <span className={getStatusClass(b.status)}>
+                                                    {b.status}
+                                                </span>
+
+                                            </td>
+
                                         </tr>
-                                    ) : (
-                                        filteredBookings.map((booking, index) => (
-                                            <tr key={booking._id}>
-                                                <td className="ps-4">{index + 1}</td>
-                                                <td>{booking.user_id ? `${booking.user_id.firstName} ${booking.user_id.lastName}` : 'N/A'}</td>
-                                                <td>{booking.bike_name}</td>
-                                                <td>{booking.bike_numplate}</td>
-                                                <td>{new Date(booking.date_time).toLocaleString()}</td>
-                                                <td>{serviceMap[booking.bike_services]}</td>
-                                                <td>{booking.status}</td>
-                                            </tr>
-                                        ))
-                                    )}
-                                </tbody>
-                            </table>
-                        </div>
+
+                                    ))
+
+                                )}
+
+                            </tbody>
+
+                        </table>
+
                     </div>
+
                 </div>
+
             </div>
+
         </div>
+
     );
+
 };
 
 export default AdminDashboard;

@@ -1,0 +1,149 @@
+/* Background wrapper */
+
+.service-page-bg {
+    background: linear-gradient(135deg,
+            #fff8e1 25%,
+            #e2a79d 50%,
+            #f97673);
+    min-height: 100vh;
+    padding: 40px 20px;
+}
+
+/* Main container */
+
+.service-container {
+    max-width: 750px;
+    margin: auto;
+    padding: 40px;
+    background: rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+}
+
+/* Title */
+
+.section-title {
+    font-weight: 700;
+    margin-bottom: 40px;
+    color: #333;
+}
+
+/* Card styling */
+
+.service-card {
+    background: white;
+    border-radius: 12px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+}
+
+.service-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 14px 40px rgba(0, 0, 0, 0.18);
+}
+
+/* Header */
+
+.service-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+.service-header h3 {
+    font-weight: 600;
+}
+
+/* Price */
+
+.price {
+    font-size: 26px;
+    font-weight: bold;
+    color: #28a745;
+}
+
+/* Service list */
+
+.service-list {
+    margin-top: 10px;
+    margin-bottom: 20px;
+    padding-left: 18px;
+}
+
+.service-list li {
+    margin-bottom: 6px;
+    color: #555;
+}
+
+/* Buttons */
+
+.book-btn {
+    width: 100%;
+    border: none;
+    padding: 12px;
+    border-radius: 8px;
+    font-weight: 600;
+    font-size: 16px;
+    transition: 0.3s;
+    cursor: pointer;
+}
+
+/* Premium service */
+
+.premium-service {
+    border-left: 6px solid #007bff;
+}
+
+.premium-service .book-btn {
+    background: #007bff;
+    color: white;
+}
+
+.premium-service .book-btn:hover {
+    background: #0056b3;
+}
+
+/* Basic service */
+
+.basic-service {
+    border-left: 6px solid #28a745;
+}
+
+.basic-service .book-btn {
+    background: #28a745;
+    color: white;
+}
+
+.basic-service .book-btn:hover {
+    background: #1f7a34;
+}
+
+/* Customize service */
+
+.customize-service {
+    border-left: 6px solid #ff9800;
+}
+
+.customize-service .price {
+    color: #ff9800;
+}
+
+.customize-btn {
+    background: #ff9800;
+    color: white;
+}
+
+.customize-btn:hover {
+    background: #e68900;
+}
+
+/* description */
+
+.custom-desc {
+    font-size: 14px;
+    color: #666;
+    margin-bottom: 10px;
+}

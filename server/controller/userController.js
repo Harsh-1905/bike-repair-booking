@@ -3,32 +3,40 @@ import Booking from "../model/bookModel.js";
 import Contact from "../model/contactmodel.js";
 import bcrypt from "bcryptjs";
 
+
+
 export const create = async (req, res) => {
     try {
-        const newUser = new User(req.body);
-        const { email } = newUser;
 
-        // check if user already exists
+        const { email, password } = req.body;
+
         const userExist = await User.findOne({ email });
         if (userExist) {
             return res.status(400).json({ success: false, message: "User already exists." });
         }
 
+        const hashedPassword = await bcrypt.hash(password, 10);
+
+        const newUser = new User({
+            ...req.body,
+            password: hashedPassword
+        });
+
         const savedData = await newUser.save();
 
-        // hide password in response
-        const { password, ...userWithoutPassword } = savedData.toObject();
+        const { password: pw, ...userWithoutPassword } = savedData.toObject();
 
         res.status(201).json({
             success: true,
             message: "User registered successfully!",
-            user: userWithoutPassword,
+            user: userWithoutPassword
         });
+
     } catch (error) {
         res.status(500).json({
             success: false,
             message: "Something went wrong",
-            error: error.message,
+            error: error.message
         });
     }
 };
@@ -125,7 +133,23 @@ export const updateUser = async (req, res) => {
 
 export const createBooking = async (req, res) => {
     try {
+
+        // 🔎 Check if booking already exists for same bike and date
+        const existing = await Booking.findOne({
+            date: req.body.date,
+            bikeNumPlate: req.body.bikeNumPlate
+        });
+
+        if (existing) {
+            return res.status(400).json({
+                success: false,
+                message: "Booking already exists for this date"
+            });
+        }
+
+        // ✅ If no duplicate, create booking
         const newBooking = new Booking(req.body);
+
         const savedBooking = await newBooking.save();
 
         res.status(201).json({
@@ -133,6 +157,7 @@ export const createBooking = async (req, res) => {
             message: "Booking created successfully!",
             data: savedBooking
         });
+
     } catch (error) {
         res.status(500).json({
             success: false,

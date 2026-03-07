@@ -33,7 +33,7 @@ const Login = ({ setUser }) => {
                 if (loggedUser.userType === "admin") {
                     navigate("/adminDashboard");
                 } else {
-                    navigate("/");
+                    navigate("/userhomepage");
                 }
 
                 // clear inputs

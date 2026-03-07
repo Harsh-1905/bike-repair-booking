@@ -24,10 +24,10 @@ const UserNavBar = ({ user, handleLogout }) => {
                 <div className="collapse navbar-collapse" id="navbarNavDropdown">
                     <ul className="navbar-nav ms-auto">
                         <li className="nav-item">
-                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/">Home</Link>
+                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/userhomepage">Home</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/service">Booking</Link>
+                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/serviceselection">Booking</Link>
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" aria-current="page" to="/history">History</Link>
