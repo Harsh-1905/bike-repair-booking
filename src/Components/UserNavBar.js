@@ -49,9 +49,9 @@ const UserNavBar = ({ user, handleLogout }) => {
                         </li>
                         {/* Dropdown for auth links */}
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle navlinktexts text-white" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <button className="nav-link dropdown-toggle navlinktexts text-white btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="false" style={{border: 'none', background: 'none', padding: '0.5rem 1rem'}}>
                                 <FontAwesomeIcon icon={faUser} />
-                            </a>
+                            </button>
                             <ul className="dropdown-menu dropdown-menu-end navbarColor px-2">
 
                                 {!user ? (

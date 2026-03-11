@@ -5,6 +5,13 @@ import api from "../../../Api/axios";
 import { showSuccess, showError } from "../../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faArrowLeft, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
+import { 
+    loadRazorpayScript, 
+    initializeRazorpayPayment, 
+    validatePaymentResponse,
+    createProductPaymentOrder,
+    verifyProductPayment
+} from "../../../utils/razorpay";
 import "./checkout.css";
 
 const Checkout = () => {
@@ -53,31 +60,140 @@ const Checkout = () => {
         setLoading(true);
 
         try {
-            const user = JSON.parse(localStorage.getItem("user"));
-            
-            const orderData = {
-                user_id: user._id,
-                items: cartItems.map((item) => ({
-                    product_id: item._id,
-                    name: item.name,
-                    image: item.image,
-                    price: item.price,
-                    quantity: item.quantity,
-                })),
-                shippingAddress: formData,
-                totalAmount: totalPrice,
-                paymentMethod,
-            };
-
-            const response = await api.post("/orders", orderData);
-
-            showSuccess("Order placed successfully!");
-            navigate(`/order-success/${response.data.order._id}`);
+            if (paymentMethod === "COD") {
+                await handleCODOrder();
+            } else {
+                await handleUPIOrder();
+            }
         } catch (error) {
             console.error("Order error:", error);
-            showError(error.response?.data?.message || "Failed to place order");
+            showError(error.message || "Failed to place order");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCODOrder = async () => {
+        const user = JSON.parse(localStorage.getItem("user"));
+        
+        const orderData = {
+            user_id: user._id,
+            items: cartItems.map((item) => ({
+                product_id: item._id,
+                name: item.name,
+                image: item.image,
+                price: item.price,
+                quantity: item.quantity,
+            })),
+            shippingAddress: formData,
+            totalAmount: totalPrice,
+            paymentMethod: "COD",
+            paymentStatus: "pending"
+        };
+
+        const response = await api.post("/orders", orderData);
+        showSuccess("Order placed successfully!");
+        navigate(`/order-success/${response.data.order._id}`);
+    };
+
+    const handleUPIOrder = async () => {
+        // Load Razorpay script
+        const isRazorpayLoaded = await loadRazorpayScript();
+        if (!isRazorpayLoaded) {
+            throw new Error("Failed to load Razorpay. Please check your internet connection.");
+        }
+
+        const user = JSON.parse(localStorage.getItem("user"));
+        
+        const orderData = {
+            user_id: user._id,
+            items: cartItems.map((item) => ({
+                product_id: item._id,
+                name: item.name,
+                image: item.image,
+                price: item.price,
+                quantity: item.quantity,
+            })),
+            shippingAddress: formData,
+            totalAmount: totalPrice,
+            paymentMethod: "Online",
+            email: user.email
+        };
+
+        // Create Razorpay order
+        const orderResponse = await createProductPaymentOrder(api, orderData, totalPrice);
+
+        if (!orderResponse.success) {
+            throw new Error(orderResponse.message || "Failed to create payment order");
+        }
+
+        const { order, key_id } = orderResponse;
+
+        // Razorpay options for UPI-only payment
+        const options = {
+            key: key_id,
+            amount: order.amount,
+            currency: order.currency,
+            name: "BikeCare Store",
+            description: `Order for ${cartItems.length} items`,
+            order_id: order.id,
+            prefill: {
+                name: formData.fullName || user?.fullName || "",
+                email: user?.email || "",
+                contact: formData.phone || user?.contactNumber || ""
+            },
+            theme: {
+                color: "#E43636"
+            },
+            notes: {
+                order_type: "product",
+                item_count: cartItems.length,
+                customer_email: user.email
+            },
+            // UPI-only configuration
+            config: {
+                display: {
+                    blocks: {
+                        utib: {
+                            name: 'Pay using UPI',
+                            instruments: [
+                                {
+                                    method: 'upi'
+                                }
+                            ]
+                        }
+                    },
+                    sequence: ['block.utib'],
+                    preferences: {
+                        show_default_blocks: false
+                    }
+                }
+            }
+        };
+
+        try {
+            // Open Razorpay checkout with UPI-only
+            const paymentResponse = await initializeRazorpayPayment(options);
+            
+            if (validatePaymentResponse(paymentResponse)) {
+                // Verify payment on backend
+                const verifyResponse = await verifyProductPayment(api, paymentResponse, orderData);
+                
+                if (verifyResponse.success) {
+                    showSuccess("Payment successful! Order placed.");
+                    navigate(`/order-success/${verifyResponse.data._id}`);
+                } else {
+                    throw new Error(verifyResponse.message || "Payment verification failed");
+                }
+            } else {
+                throw new Error("Invalid payment response");
+            }
+        } catch (error) {
+            if (error.message === 'Payment cancelled by user') {
+                showError("Payment cancelled");
+            } else {
+                throw error;
+            }
         }
     };
 
@@ -198,7 +314,7 @@ const Checkout = () => {
                                                 checked={paymentMethod === "Online"}
                                                 onChange={(e) => setPaymentMethod(e.target.value)}
                                             />
-                                            <span>Online Payment (Coming Soon)</span>
+                                            <span>UPI Payment (PhonePe, GPay, Paytm, etc.)</span>
                                         </label>
                                     </div>
                                 </div>
@@ -206,9 +322,13 @@ const Checkout = () => {
                                 <button
                                     type="submit"
                                     className="place-order-btn"
-                                    disabled={loading || paymentMethod === "Online"}
+                                    disabled={loading}
                                 >
-                                    {loading ? "Placing Order..." : "Place Order"}
+                                    {loading ? (
+                                        paymentMethod === "Online" ? "Processing UPI Payment..." : "Placing Order..."
+                                    ) : (
+                                        paymentMethod === "Online" ? "Pay with UPI" : "Place Order"
+                                    )}
                                 </button>
                             </form>
                         </div>

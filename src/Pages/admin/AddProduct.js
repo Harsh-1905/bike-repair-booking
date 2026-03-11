@@ -64,7 +64,7 @@ const AddProduct = ({ isCollapsed }) => {
             formDataToSend.append("description", formData.description);
             formDataToSend.append("image", image);
 
-            const response = await axios.post(
+            await axios.post(
                 "http://localhost:8000/api/products/add",
                 formDataToSend,
                 {

@@ -11,6 +11,7 @@ import passwordRoutes from "./route/passwordRoute.js";
 import productRoute from "./route/productRoute.js";
 import orderRoute from "./route/orderRoute.js";
 import mechanicRoute from "./route/mechanicRoute.js";
+import paymentRoute from "./route/paymentRoute.js";
 
 
 const app = express();
@@ -40,6 +41,7 @@ app.use("/api", route);
 app.use("/api/products", productRoute);
 app.use("/api", orderRoute);
 app.use("/api", mechanicRoute);
+app.use("/api/payment", paymentRoute);
 app.use("/uploads", express.static("uploads"));
 app.use("/api", passwordRoutes);
 
