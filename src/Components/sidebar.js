@@ -4,8 +4,7 @@ import api from "../Api/axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome, faUsers, faCalendarCheck, faAddressBook, faUserCircle,
-    faSignOutAlt, faSignIn, faUserPlus,
-    faBars, faTimes
+    faSignOutAlt, faShoppingBag, faPlus, faUserPlus, faWrench
 } from "@fortawesome/free-solid-svg-icons";
 import '../index.css';
 
@@ -75,7 +74,11 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
             <ul className="nav nav-pills flex-column mb-auto">
                 <SidebarItem icon={faHome} text="Dashboard" to="/adminDashboard" isActive={activePath === '/adminDashboard'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUsers} text="User Details" to="/userData" isActive={activePath === '/userData'} isCollapsed={isCollapsed} />
-                <SidebarItem icon={faCalendarCheck} text="Booking Details" to="/bookingstable" isActive={activePath === '/bookingstable'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faCalendarCheck} text="Booking Management" to="/bookingstable" isActive={activePath === '/bookingstable'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faWrench} text="Booking History" to="/admin/booking-history" isActive={activePath === '/admin/booking-history'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faShoppingBag} text="Orders" to="/admin/orders" isActive={activePath === '/admin/orders'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faPlus} text="Add Product" to="/admin/add-product" isActive={activePath === '/admin/add-product'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faUserPlus} text="Add Mechanic" to="/admin/add-mechanic" isActive={activePath === '/admin/add-mechanic'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faAddressBook} text="Contact Details" to="/contactdetails" isActive={activePath === '/contactdetails'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserCircle} text="Profile" to="/profile" isActive={activePath === '/profile'} isCollapsed={isCollapsed} />
             </ul>

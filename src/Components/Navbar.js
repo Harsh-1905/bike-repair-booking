@@ -19,6 +19,9 @@ const Navbar = () => {
                             <Link className="nav-link navlinktexts text-white" to="/aboutus">AboutUs</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" to="/ourservices">Our Services</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/contactus">Contact US</Link>
                         </li>
                         <li className="nav-item dropdown">

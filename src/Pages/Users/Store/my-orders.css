@@ -1,0 +1,249 @@
+.my-orders-page {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff8e1, #ffd6cc, #f97673);
+    padding: 40px 20px;
+}
+
+.orders-container {
+    max-width: 1000px;
+    margin: 0 auto;
+}
+
+.orders-title {
+    font-size: 2.5rem;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: 700;
+}
+
+.no-orders {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 60px 40px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+}
+
+.no-orders p {
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 10px;
+}
+
+.no-orders-sub {
+    font-size: 1rem !important;
+    color: #888 !important;
+    margin-bottom: 30px !important;
+}
+
+.shop-btn {
+    background: #E43636;
+    color: #fff;
+    padding: 14px 40px;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.shop-btn:hover {
+    background: #c72828;
+    transform: translateY(-2px);
+}
+
+.orders-list {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+}
+
+.order-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    transition: all 0.3s ease;
+}
+
+.order-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
+}
+
+.order-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #eee;
+}
+
+.order-info .order-id {
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.order-info .order-date {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.order-status {
+    padding: 8px 20px;
+    border-radius: 20px;
+    color: #fff;
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.order-items {
+    margin-bottom: 20px;
+}
+
+.order-item {
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    padding: 12px;
+    background: #f8f9fa;
+    border-radius: 10px;
+    margin-bottom: 10px;
+}
+
+.order-item:last-child {
+    margin-bottom: 0;
+}
+
+.order-item img {
+    width: 60px;
+    height: 60px;
+    object-fit: contain;
+    border-radius: 8px;
+    background: #fff;
+}
+
+.order-item .item-info {
+    flex: 1;
+}
+
+.order-item .item-name {
+    font-weight: 600;
+    color: #333;
+    margin-bottom: 5px;
+}
+
+.order-item .item-qty {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.order-item .item-price {
+    font-weight: 700;
+    color: #E43636;
+    font-size: 1.1rem;
+}
+
+.order-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 15px;
+    border-top: 2px solid #eee;
+}
+
+.order-total {
+    font-size: 1.2rem;
+}
+
+.order-total span {
+    color: #666;
+    margin-right: 10px;
+}
+
+.order-total strong {
+    color: #E43636;
+    font-size: 1.4rem;
+}
+
+.view-details-btn {
+    background: #333;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.view-details-btn:hover {
+    background: #000;
+    transform: translateY(-2px);
+}
+
+.loading {
+    text-align: center;
+    font-size: 1.5rem;
+    color: #333;
+    padding: 60px 20px;
+}
+
+@media (max-width: 768px) {
+    .orders-title {
+        font-size: 2rem;
+    }
+
+    .order-header {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 10px;
+    }
+
+    .order-footer {
+        flex-direction: column;
+        gap: 15px;
+        align-items: stretch;
+    }
+
+    .view-details-btn {
+        width: 100%;
+    }
+}
+/* Cancel Order Button */
+.order-actions {
+    display: flex;
+    gap: 10px;
+}
+
+.cancel-order-btn {
+    background: #dc3545;
+    color: #fff;
+    padding: 10px 20px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.cancel-order-btn:hover {
+    background: #c82333;
+    transform: translateY(-2px);
+}
+
+@media (max-width: 768px) {
+    .order-actions {
+        width: 100%;
+    }
+    
+    .cancel-order-btn {
+        width: 100%;
+    }
+}

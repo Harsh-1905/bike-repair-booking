@@ -1,0 +1,44 @@
+.add-mechanic-container {
+    padding: 30px;
+    background: #f8f9fa;
+    min-height: 100vh;
+    margin-left: 250px;
+}
+
+.add-mechanic-header {
+    background: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    margin-bottom: 20px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.add-mechanic-header h2 {
+    margin: 0;
+    color: #333;
+}
+
+.add-mechanic-card {
+    background: #fff;
+    border-radius: 10px;
+    padding: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+@media (max-width: 992px) {
+    .add-mechanic-container {
+        margin-left: 80px;
+        padding: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .add-mechanic-container {
+        margin-left: 0;
+        padding: 15px;
+    }
+
+    .add-mechanic-card {
+        padding: 20px;
+    }
+}

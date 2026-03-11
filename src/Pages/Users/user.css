@@ -1,3 +1,162 @@
 .actionButtons button {
     margin: 0 30;
 }
+
+/* Profile Page Styles */
+.profile-wrapper {
+    min-height: 100vh;
+    padding: 40px 0;
+    background: linear-gradient(135deg, #fff8e1, #ffd6cc, #f97673);
+}
+
+/* LEFT CARD */
+.profile-card {
+    border-radius: 15px;
+    overflow: hidden;
+    background: white;
+}
+
+.profile-header {
+    height: 120px;
+    background: linear-gradient(135deg, #f97673, #E43636);
+}
+
+.profile-body {
+    padding: 30px;
+    margin-top: -60px;
+}
+
+/* AVATAR */
+.avatar {
+    width: 120px;
+    height: 120px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97673, #E43636);
+    color: white;
+    font-size: 42px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: bold;
+    border: 5px solid white;
+    margin: auto;
+    text-transform: uppercase;
+}
+
+.profile-body h4 {
+    font-weight: 600;
+    color: #333;
+}
+
+.profile-body .text-muted {
+    color: #666 !important;
+    font-size: 14px;
+}
+
+.user-role-badge {
+    display: inline-block;
+    background: linear-gradient(135deg, #f97673, #E43636);
+    color: white;
+    padding: 6px 20px;
+    border-radius: 20px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 10px;
+}
+
+/* RIGHT CARD */
+.profile-details {
+    border-radius: 15px;
+}
+
+.section-title {
+    font-weight: 600;
+    border-bottom: 2px solid #eee;
+    padding-bottom: 10px;
+    color: #333;
+}
+
+/* PROFILE ROW */
+.profile-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #eee;
+}
+
+.profile-row:last-of-type {
+    border-bottom: none;
+}
+
+.profile-row label {
+    font-weight: 600;
+    width: 35%;
+    color: #333;
+}
+
+.profile-row .value {
+    width: 65%;
+}
+
+.profile-row span {
+    color: #555;
+}
+
+/* INPUT */
+.profile-row .form-control {
+    border-radius: 8px;
+    padding: 8px 12px;
+    border: 2px solid #e0e0e0;
+    transition: all 0.3s ease;
+}
+
+.profile-row .form-control:focus {
+    outline: none;
+    border-color: #f97673;
+    box-shadow: 0 0 0 3px rgba(249, 118, 115, 0.1);
+}
+
+/* EDIT BUTTON */
+.edit-btn {
+    background: #E43636;
+    color: white;
+    width: 220px;
+    padding: 10px;
+    border: none;
+    border-radius: 8px;
+    font-weight: 500;
+    transition: 0.3s;
+}
+
+.edit-btn:hover {
+    background: #c72828;
+    transform: scale(1.03);
+    color: white;
+}
+
+/* LOADING */
+.loading {
+    text-align: center;
+    padding: 80px;
+    font-size: 18px;
+    color: #333;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .profile-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 8px;
+    }
+
+    .profile-row label,
+    .profile-row .value {
+        width: 100%;
+    }
+
+    .edit-btn {
+        width: 100%;
+    }
+}

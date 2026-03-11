@@ -1,0 +1,202 @@
+/* History Component Styles */
+
+.empty-state {
+    text-align: center;
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 60px 40px;
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    margin-top: 20px;
+}
+
+.empty-state p {
+    font-size: 1.2rem;
+    color: #666;
+    margin: 0;
+}
+
+/* Table Container */
+.history-table-container {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    padding: 25px;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    overflow: hidden;
+}
+
+/* Table Styles */
+.history-table {
+    width: 100%;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+
+.history-table thead {
+    background: linear-gradient(135deg, #f97673, #E43636);
+}
+
+.history-table th {
+    padding: 18px 15px;
+    text-align: left;
+    color: white;
+    font-weight: 600;
+    font-size: 1rem;
+    border: none;
+    position: relative;
+}
+
+.history-table th:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    right: 0;
+    top: 20%;
+    height: 60%;
+    width: 1px;
+    background: rgba(255, 255, 255, 0.3);
+}
+
+.history-table-row {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.history-table-row:last-child {
+    border-bottom: none;
+}
+
+.history-table-row:hover {
+    background: rgba(249, 118, 115, 0.05);
+    transform: translateX(5px);
+}
+
+.history-table td {
+    padding: 20px 15px;
+    border: none;
+}
+
+/* Cell Content Styles */
+.bike-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+}
+
+.bike-company {
+    font-weight: 600;
+    color: #333;
+    font-size: 1rem;
+}
+
+.bike-model {
+    color: #666;
+    font-size: 0.9rem;
+}
+
+.number-plate {
+    background: #f8f9fa;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-weight: 600;
+    color: #333;
+    font-size: 0.95rem;
+}
+
+.service-name {
+    font-weight: 500;
+    color: #333;
+    background: #e8f5e9;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-size: 0.9rem;
+}
+
+.booking-date,
+.order-date {
+    color: #555;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.booking-price,
+.order-total {
+    font-weight: 700;
+    color: #E43636;
+    font-size: 1.1rem;
+}
+
+.order-id {
+    font-weight: 600;
+    color: #333;
+    background: #f0f5ff;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-family: monospace;
+    font-size: 0.9rem;
+}
+
+.items-count {
+    color: #666;
+    font-weight: 500;
+    font-size: 0.95rem;
+}
+
+.payment-method {
+    background: #fff3cd;
+    color: #856404;
+    padding: 6px 12px;
+    border-radius: 6px;
+    font-weight: 500;
+    font-size: 0.9rem;
+}
+
+/* Status Badges */
+.status-badge {
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    display: inline-block;
+    min-width: 100px;
+    text-align: center;
+}
+
+.badge.bg-success {
+    background: #28a745 !important;
+    color: white !important;
+}
+
+.badge.bg-danger {
+    background: #dc3545 !important;
+    color: white !important;
+}
+
+.badge.bg-secondary {
+    background: #6c757d !important;
+    color: white !important;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .history-table-container {
+        padding: 15px;
+        overflow-x: auto;
+    }
+
+    .history-table {
+        min-width: 700px;
+    }
+
+    .history-table th,
+    .history-table td {
+        padding: 15px 10px;
+        font-size: 0.9rem;
+    }
+
+    .status-badge {
+        min-width: 80px;
+        padding: 6px 12px;
+        font-size: 0.8rem;
+    }
+}

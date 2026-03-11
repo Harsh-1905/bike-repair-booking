@@ -1,7 +1,7 @@
 import { useState } from "react";
 import api from "../../Api/axios";
 import { showError, showSuccess } from "../../utils/toast";
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 const Reset_Password = () => {
     const [otp, setOtp] = useState("");
@@ -11,23 +11,24 @@ const Reset_Password = () => {
     const navigate = useNavigate();
     const location = useLocation();
 
-    // email passed from ForgotPassword page
+    // Email passed from ForgotPassword page
     const email = location.state?.email;
 
-    const handleclickevent = async () => {
-        // ✅ basic validations
+    const handleSubmit = async (e) => {
+        e.preventDefault();
+
         if (!otp || !newPassword || !confirmPassword) {
             showError("Please fill all fields");
             return;
         }
 
-        if (newPassword !== confirmPassword) {
-            showError("Passwords do not match");
+        if (newPassword.length < 6) {
+            showError("Password must be at least 6 characters long");
             return;
         }
 
-        if (newPassword.length < 6) {
-            showError("Password must be at least 6 characters");
+        if (newPassword !== confirmPassword) {
+            showError("Passwords do not match");
             return;
         }
 
@@ -50,64 +51,112 @@ const Reset_Password = () => {
     };
 
     return (
-        <div className="d-flex flex-column flex-md-row w-100 vh-100">
-            <div className="col-12 col-md-6 d-flex align-items-center justify-content-center">
-                <img
-                    src="../images/bikecare7.jpg"
-                    alt="Bike"
-                    className="img-fluid h-70 w-70 object-fit-cover"
-                />
-            </div>
-
-            <div
-                className="col-12 col-md-6 border d-flex flex-column gap-4 align-items-center shadow-lg"
-                style={{ paddingTop: "110px" }}
-            >
-                <div>
-                    <h3 className="text-center">Reset Password</h3>
-                </div>
-
-                <div className="d-flex flex-column gap-4 col-10">
-                    <div>
+        <div style={{ 
+            minHeight: "100vh", 
+            background: "linear-gradient(135deg, #fff8e1, #ffd6cc, #f97673)",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            padding: "20px"
+        }}>
+            <div style={{
+                background: "white",
+                padding: "2rem",
+                borderRadius: "15px",
+                boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                width: "100%",
+                maxWidth: "400px"
+            }}>
+                <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#333" }}>
+                    Reset Password
+                </h2>
+                <p style={{ textAlign: "center", color: "#666", marginBottom: "2rem" }}>
+                    Enter the OTP sent to your email and create a new password
+                </p>
+                
+                <form onSubmit={handleSubmit}>
+                    <div style={{ marginBottom: "1rem" }}>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
+                            OTP *
+                        </label>
                         <input
                             type="text"
                             value={otp}
-                            className="form-control"
-                            placeholder="Enter OTP"
                             onChange={(e) => setOtp(e.target.value)}
+                            placeholder="Enter 6-digit OTP"
+                            maxLength="6"
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "2px solid #ddd",
+                                borderRadius: "8px",
+                                fontSize: "1rem"
+                            }}
+                            required
                         />
                     </div>
 
-                    <div>
+                    <div style={{ marginBottom: "1rem" }}>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
+                            New Password *
+                        </label>
                         <input
                             type="password"
                             value={newPassword}
-                            className="form-control"
-                            placeholder="New Password"
                             onChange={(e) => setNewPassword(e.target.value)}
+                            minLength="6"
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "2px solid #ddd",
+                                borderRadius: "8px",
+                                fontSize: "1rem"
+                            }}
+                            required
                         />
                     </div>
 
-                    <div>
+                    <div style={{ marginBottom: "2rem" }}>
+                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
+                            Confirm Password *
+                        </label>
                         <input
                             type="password"
                             value={confirmPassword}
-                            className="form-control"
-                            placeholder="Confirm Password"
                             onChange={(e) => setConfirmPassword(e.target.value)}
+                            style={{
+                                width: "100%",
+                                padding: "10px",
+                                border: "2px solid #ddd",
+                                borderRadius: "8px",
+                                fontSize: "1rem"
+                            }}
+                            required
                         />
                     </div>
-                </div>
 
-                <div>
-                    <button
-                        className="btn w-full"
-                        onClick={handleclickevent}
-                        style={{ background: "#E43636", color: "#FFF", width: "250px" }}
+                    <button 
+                        type="submit"
+                        style={{
+                            width: "100%",
+                            padding: "12px",
+                            background: "linear-gradient(45deg, #f97673, #E43636)",
+                            color: "white",
+                            border: "none",
+                            borderRadius: "25px",
+                            fontSize: "1rem",
+                            fontWeight: "600",
+                            cursor: "pointer",
+                            transition: "all 0.3s ease"
+                        }}
                     >
                         Reset Password
                     </button>
-                </div>
+                </form>
+
+                <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
+                    Remember your password? <Link to="/signin" style={{ color: "#E43636", textDecoration: "none" }}>Login</Link>
+                </p>
             </div>
         </div>
     );
