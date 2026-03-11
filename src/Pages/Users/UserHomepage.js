@@ -57,7 +57,7 @@ const UserHome = () => {
         return () => {
             isMounted = false;
         };
-    }, [user?._id]); // Only depend on user ID, not the whole user object
+    }, [user]);
 
     const getStatusColor = (status) => {
         switch (status) {

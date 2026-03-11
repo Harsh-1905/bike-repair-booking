@@ -25,9 +25,9 @@ const Navbar = () => {
                             <Link className="nav-link navlinktexts text-white" to="/contactus">Contact US</Link>
                         </li>
                         <li className="nav-item dropdown">
-                            <a className="nav-link dropdown-toggle navlinktexts text-white" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="true">
+                            <button className="nav-link dropdown-toggle navlinktexts text-white btn btn-link" type="button" data-bs-toggle="dropdown" aria-expanded="true" style={{border: 'none', background: 'none', padding: '0.5rem 1rem'}}>
                                 <FontAwesomeIcon icon={faUser} />
-                            </a>
+                            </button>
                             <ul className="dropdown-menu dropdown-menu-end px-2">
                                 <div className='d-flex flex-row align-items-center'>
                                     <FontAwesomeIcon icon={faSignIn} className='IconColor' />
