@@ -13,6 +13,13 @@ import {
 import api from "../../../Api/axios";
 import { showSuccess, showError } from "../../../utils/toast";
 import BookingSuccessModal from "./BookingSuccessModal";
+import { 
+    loadRazorpayScript, 
+    initializeRazorpayPayment, 
+    validatePaymentResponse,
+    createBookingPaymentOrder,
+    verifyBookingPayment
+} from "../../../utils/razorpay";
 import "./service-billing.css";
 
 const ServiceBilling = () => {
@@ -40,41 +47,124 @@ const ServiceBilling = () => {
         setLoading(true);
         
         try {
-            let finalBookingData = {
-                ...bookingData,
-                paymentMethod,
-                paymentStatus: paymentMethod === "cash" ? "pending" : "paid"
-            };
-
-            console.log("Sending booking data:", finalBookingData);
-
-            // If online payment, simulate payment processing
-            if (paymentMethod === "online") {
-                // Simulate payment processing delay
-                await new Promise(resolve => setTimeout(resolve, 2000));
-                
-                // For demo purposes, assume payment is successful
-                // In real implementation, integrate with payment gateway like Razorpay, Stripe, etc.
-                showSuccess("Payment processed successfully!");
-            }
-
-            const res = await api.post("/booking", finalBookingData);
-
-            if (res.data.success) {
-                showSuccess("Booking confirmed successfully!");
-                
-                // Set booking ID and show success modal
-                setBookingId(res.data.data._id);
-                setShowSuccessModal(true);
+            if (paymentMethod === "cash") {
+                // Handle cash payment - create booking directly
+                await handleCashPayment();
             } else {
-                showError(res.data.message || "Booking failed");
+                // Handle UPI payment with Razorpay
+                await handleUPIPayment();
             }
         } catch (err) {
-            console.error("Booking error:", err);
-            console.error("Error response:", err.response?.data);
-            showError(err.response?.data?.message || "Booking failed");
+            console.error("Payment error:", err);
+            showError(err.message || "Payment failed");
         } finally {
             setLoading(false);
+        }
+    };
+
+    const handleCashPayment = async () => {
+        const finalBookingData = {
+            ...bookingData,
+            paymentMethod: "cash",
+            paymentStatus: "pending"
+        };
+
+        const res = await api.post("/booking", finalBookingData);
+
+        if (res.data.success) {
+            showSuccess("Booking confirmed successfully!");
+            setBookingId(res.data.data._id);
+            setShowSuccessModal(true);
+        } else {
+            showError(res.data.message || "Booking failed");
+        }
+    };
+
+    const handleUPIPayment = async () => {
+        // Load Razorpay script
+        const isRazorpayLoaded = await loadRazorpayScript();
+        if (!isRazorpayLoaded) {
+            throw new Error("Failed to load Razorpay. Please check your internet connection.");
+        }
+
+        const totalAmount = Math.round((bookingData.price + (bookingData.pickupDrop === "yes" ? 50 : 0)) * 1.18);
+        
+        // Create Razorpay order
+        const orderResponse = await createBookingPaymentOrder(api, bookingData, totalAmount);
+
+        if (!orderResponse.success) {
+            throw new Error(orderResponse.message || "Failed to create payment order");
+        }
+
+        const { order, key_id } = orderResponse;
+        const user = JSON.parse(localStorage.getItem("user"));
+
+        // Razorpay options for UPI-only payment
+        const options = {
+            key: key_id,
+            amount: order.amount,
+            currency: order.currency,
+            name: "BikeCare Services",
+            description: `Service booking for ${bookingData.bikeCompany} ${bookingData.bikeModel}`,
+            order_id: order.id,
+            prefill: {
+                name: user?.fullName || "",
+                email: user?.email || "",
+                contact: user?.contactNumber || ""
+            },
+            theme: {
+                color: "#E43636"
+            },
+            notes: {
+                booking_type: "service",
+                bike_model: bookingData.bikeModel,
+                service_type: bookingData.bikeService
+            },
+            // UPI-only configuration
+            config: {
+                display: {
+                    blocks: {
+                        utib: {
+                            name: 'Pay using UPI',
+                            instruments: [
+                                {
+                                    method: 'upi'
+                                }
+                            ]
+                        }
+                    },
+                    sequence: ['block.utib'],
+                    preferences: {
+                        show_default_blocks: false
+                    }
+                }
+            }
+        };
+
+        try {
+            // Open Razorpay checkout with UPI-only
+            const paymentResponse = await initializeRazorpayPayment(options);
+            
+            if (validatePaymentResponse(paymentResponse)) {
+                // Verify payment on backend
+                const verifyResponse = await verifyBookingPayment(api, paymentResponse, bookingData);
+                
+                if (verifyResponse.success) {
+                    showSuccess("Payment successful! Booking confirmed.");
+                    setBookingId(verifyResponse.data._id);
+                    setShowSuccessModal(true);
+                } else {
+                    throw new Error(verifyResponse.message || "Payment verification failed");
+                }
+            } else {
+                throw new Error("Invalid payment response");
+            }
+        } catch (error) {
+            if (error.message === 'Payment cancelled by user') {
+                showError("Payment cancelled");
+            } else {
+                throw error;
+            }
         }
     };
 
@@ -229,8 +319,8 @@ const ServiceBilling = () => {
                                                         <FontAwesomeIcon icon={faCreditCard} />
                                                     </div>
                                                     <div className="payment-details">
-                                                        <h6>Online Payment</h6>
-                                                        <p>Pay now using UPI, Card, or Net Banking</p>
+                                                        <h6>UPI Payment</h6>
+                                                        <p>Pay now using UPI (PhonePe, GPay, Paytm, etc.)</p>
                                                     </div>
                                                     <div className="payment-radio">
                                                         <input 
@@ -288,7 +378,7 @@ const ServiceBilling = () => {
                                             ) : (
                                                 <div className="online-info">
                                                     <FontAwesomeIcon icon={faCreditCard} className="me-2" />
-                                                    <span>Secure online payment</span>
+                                                    <span>Secure UPI payment</span>
                                                 </div>
                                             )}
                                         </div>
@@ -300,12 +390,12 @@ const ServiceBilling = () => {
                                         >
                                             {loading ? (
                                                 <span>
-                                                    {paymentMethod === "online" ? "Processing Payment..." : "Confirming Booking..."}
+                                                    {paymentMethod === "online" ? "Processing UPI Payment..." : "Confirming Booking..."}
                                                 </span>
                                             ) : (
                                                 <>
                                                     <FontAwesomeIcon icon={faCheckCircle} className="me-2" />
-                                                    {paymentMethod === "cash" ? "Confirm Booking" : "Pay Now"}
+                                                    {paymentMethod === "cash" ? "Confirm Booking" : "Pay with UPI"}
                                                 </>
                                             )}
                                         </button>

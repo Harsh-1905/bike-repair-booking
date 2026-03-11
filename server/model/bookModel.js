@@ -101,6 +101,17 @@ const bookingSchema = new mongoose.Schema({
         type: String,
         enum: ["pending", "paid", "failed"],
         default: "pending"
+    },
+
+    // Razorpay payment fields
+    razorpayOrderId: {
+        type: String,
+        default: null
+    },
+
+    razorpayPaymentId: {
+        type: String,
+        default: null
     }
 
 }, { timestamps: true });
