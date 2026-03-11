@@ -1,11 +1,8 @@
 // Configuration utility for API URLs
 
-// Get the base API URL based on environment
+// Get the base API URL from environment variable
 export const getApiBaseURL = () => {
-    if (process.env.NODE_ENV === 'development') {
-        return "http://localhost:8000";
-    }
-    return "https://bike-repair-booking.onrender.com";
+    return process.env.REACT_APP_API_URL || "http://localhost:5000";
 };
 
 // Get the full API URL
