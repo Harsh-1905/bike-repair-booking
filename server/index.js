@@ -16,9 +16,26 @@ import paymentRoute from "./route/paymentRoute.js";
 
 const app = express();
 
-// ✅ Allow frontend requests
+// ✅ Allow frontend requests from multiple origins
+const allowedOrigins = [
+    process.env.FRONTEND_URL_LOCAL || "http://localhost:3000", // Local development
+    process.env.FRONTEND_URL_PRODUCTION, // Production frontend from env
+    "https://bikecare-7r4i.vercel.app", // Your actual frontend domain
+    "https://bikecare.vercel.app" // In case you get a custom domain later
+].filter(Boolean); // Remove undefined values
+
 app.use(cors({
-    origin: "http://localhost:3000",
+    origin: function (origin, callback) {
+        // Allow requests with no origin (like mobile apps or curl requests)
+        if (!origin) return callback(null, true);
+        
+        if (allowedOrigins.indexOf(origin) !== -1) {
+            callback(null, true);
+        } else {
+            console.log(`CORS blocked origin: ${origin}`);
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ["GET", "POST", "PUT", "DELETE"],
     credentials: true // important for sending cookies
 }));

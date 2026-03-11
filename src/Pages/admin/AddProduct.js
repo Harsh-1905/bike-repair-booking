@@ -3,6 +3,7 @@ import axios from "axios";
 import { showSuccess, showError } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faUpload, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { getApiBaseURL } from "../../utils/config";
 import "./add-product.css";
 
 const AddProduct = ({ isCollapsed }) => {
@@ -65,7 +66,7 @@ const AddProduct = ({ isCollapsed }) => {
             formDataToSend.append("image", image);
 
             await axios.post(
-                "http://localhost:8000/api/products/add",
+                `${getApiBaseURL()}/api/products/add`,
                 formDataToSend,
                 {
                     headers: {
