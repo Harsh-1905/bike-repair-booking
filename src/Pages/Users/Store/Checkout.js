@@ -12,6 +12,7 @@ import {
     createProductPaymentOrder,
     verifyProductPayment
 } from "../../../utils/razorpay";
+import { getProductImageURL } from "../../../utils/config";
 import "./checkout.css";
 
 const Checkout = () => {
@@ -341,7 +342,7 @@ const Checkout = () => {
                                 {cartItems.map((item) => (
                                     <div key={item._id} className="summary-item">
                                         <img
-                                            src={`http://localhost:8000/uploads/productimages/${item.image}`}
+                                            src={getProductImageURL(item.image)}
                                             alt={item.name}
                                         />
                                         <div className="item-info">

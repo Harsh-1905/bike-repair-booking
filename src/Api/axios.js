@@ -1,7 +1,18 @@
 import axios from "axios";
 
+// Determine the API base URL based on environment
+const getBaseURL = () => {
+    // Check if we're in development or production
+    if (process.env.NODE_ENV === 'development') {
+        return "http://localhost:8000/api";
+    }
+    
+    // Production backend URL
+    return "https://bike-repair-booking.onrender.com/api";
+};
+
 const api = axios.create({
-    baseURL: "http://localhost:8000/api",
+    baseURL: getBaseURL(),
     headers: {
         "Content-Type": "application/json"
     },

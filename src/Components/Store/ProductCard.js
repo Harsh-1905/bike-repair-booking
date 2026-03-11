@@ -1,6 +1,7 @@
 import { useCart } from "../../Pages/Users/Store/Cartcontext";
 import { showSuccess } from "../../utils/toast";
 import { useNavigate } from "react-router-dom";
+import { getProductImageURL } from "../../utils/config";
 
 const ProductCard = ({ product, openQuickView }) => {
     const { addToCart } = useCart();
@@ -20,7 +21,7 @@ const ProductCard = ({ product, openQuickView }) => {
 
             <div className="product-image">
                 <img
-                    src={`http://localhost:8000/uploads/productimages/${product.image}`}
+                    src={getProductImageURL(product.image)}
                     alt={product.name}
                 />
             </div>

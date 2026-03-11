@@ -4,6 +4,7 @@ import { useCart } from "./Cartcontext";
 import api from "../../../Api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faCheckCircle, faHome, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
+import { getProductImageURL } from "../../../utils/config";
 import "./order-success.css";
 
 const OrderSuccess = () => {
@@ -92,7 +93,7 @@ const OrderSuccess = () => {
                             {order.items.map((item, index) => (
                                 <div key={index} className="order-item">
                                     <img
-                                        src={`http://localhost:8000/uploads/productimages/${item.image}`}
+                                        src={getProductImageURL(item.image)}
                                         alt={item.name}
                                     />
                                     <div className="item-details">

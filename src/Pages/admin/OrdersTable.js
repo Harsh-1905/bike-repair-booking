@@ -3,6 +3,7 @@ import api from "../../Api/axios";
 import { showSuccess, showError } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { getProductImageURL } from "../../utils/config";
 import "./orders-table.css";
 
 const OrdersTable = ({ isCollapsed }) => {
@@ -209,7 +210,7 @@ const OrdersTable = ({ isCollapsed }) => {
                                 {selectedOrder.items.map((item, index) => (
                                     <div key={index} className="order-item-detail">
                                         <img
-                                            src={`http://localhost:8000/uploads/productimages/${item.image}`}
+                                            src={getProductImageURL(item.image)}
                                             alt={item.name}
                                         />
                                         <div className="item-info">
