@@ -30,6 +30,9 @@ const UserNavBar = ({ user, handleLogout }) => {
                             <Link className="nav-link navlinktexts text-white" aria-current="page" to="/serviceselection">Booking</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" aria-current="page" to="/tracking">Track Bookings</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" aria-current="page" to="/history">History</Link>
                         </li>
                         <li className="nav-item">
@@ -37,6 +40,12 @@ const UserNavBar = ({ user, handleLogout }) => {
                         </li>
                         <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/store">Store</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" to="/my-orders">My Orders</Link>
+                        </li>
+                        <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" to="/cart">Cart</Link>
                         </li>
                         {/* Dropdown for auth links */}
                         <li className="nav-item dropdown">

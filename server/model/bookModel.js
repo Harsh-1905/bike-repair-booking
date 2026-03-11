@@ -40,7 +40,10 @@ const bookingSchema = new mongoose.Schema({
 
     // for customize service
     selectedServices: {
-        type: [String],
+        type: [{
+            name: String,
+            price: Number
+        }],
         default: []
     },
 
@@ -80,6 +83,24 @@ const bookingSchema = new mongoose.Schema({
             "Cancelled"
         ],
         default: "Pending"
+    },
+
+    mechanic_id: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: "Mechanic",
+        default: null
+    },
+
+    paymentMethod: {
+        type: String,
+        enum: ["cash", "online"],
+        default: "cash"
+    },
+
+    paymentStatus: {
+        type: String,
+        enum: ["pending", "paid", "failed"],
+        default: "pending"
     }
 
 }, { timestamps: true });

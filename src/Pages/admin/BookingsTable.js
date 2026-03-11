@@ -1,12 +1,15 @@
 import React, { useEffect, useState } from "react";
 import api from "../../Api/axios";
+import { showSuccess, showError } from "../../utils/toast";
 
 const BookingTable = ({ isCollapsed }) => {
 
     const [bookings, setBookings] = useState([]);
+    const [mechanics, setMechanics] = useState([]);
 
     useEffect(() => {
         fetchBookings();
+        fetchMechanics();
     }, []);
 
     const fetchBookings = () => {
@@ -15,12 +18,25 @@ const BookingTable = ({ isCollapsed }) => {
             .then(res => {
 
                 if (res.data.success) {
-                    setBookings(res.data.data);
+                    // Filter only active bookings (not completed or cancelled)
+                    const activeBookings = res.data.data.filter(
+                        (booking) => booking.status !== "Completed" && booking.status !== "Cancelled"
+                    );
+                    setBookings(activeBookings);
                 }
 
             })
             .catch(err => console.error(err));
 
+    };
+
+    const fetchMechanics = async () => {
+        try {
+            const response = await api.get("/mechanics/available");
+            setMechanics(response.data);
+        } catch (error) {
+            console.error("Error fetching mechanics:", error);
+        }
     };
 
     const updateStatus = async (id, status) => {
@@ -35,10 +51,30 @@ const BookingTable = ({ isCollapsed }) => {
                 )
             );
 
+            showSuccess("Status updated successfully");
+
         } catch (err) {
             console.error(err);
+            showError("Failed to update status");
         }
 
+    };
+
+    const assignMechanic = async (bookingId, mechanicId) => {
+        try {
+            await api.put(`/booking/${bookingId}`, { mechanic_id: mechanicId });
+
+            setBookings(prev =>
+                prev.map(b =>
+                    b._id === bookingId ? { ...b, mechanic_id: mechanicId } : b
+                )
+            );
+
+            showSuccess("Mechanic assigned successfully");
+        } catch (err) {
+            console.error(err);
+            showError("Failed to assign mechanic");
+        }
     };
 
     const getStatusClass = (status) => {
@@ -77,7 +113,7 @@ const BookingTable = ({ isCollapsed }) => {
             }}
         >
 
-            <h2 className="mb-3">All Bookings</h2>
+            <h2 className="mb-3">Booking Management - Active Bookings</h2>
 
             <div className="card shadow-sm">
 
@@ -93,6 +129,8 @@ const BookingTable = ({ isCollapsed }) => {
                                 <th>Number</th>
                                 <th>Service</th>
                                 <th>Problem</th>
+                                <th>Assigned Mechanic</th>
+                                <th>Assign</th>
                                 <th>Status</th>
                                 <th>Update</th>
                             </tr>
@@ -107,26 +145,59 @@ const BookingTable = ({ isCollapsed }) => {
 
                                     <tr key={booking._id}>
 
-                                        <td style={{ width: "15%" }}>
+                                        <td style={{ width: "10%" }}>
                                             {booking.user_id
-                                                ? `${booking.user_id.firstName} ${booking.user_id.lastName}`
+                                                ? booking.user_id.fullName
                                                 : "N/A"}
                                         </td>
 
-                                        <td style={{ width: "15%" }}>
+                                        <td style={{ width: "10%" }}>
                                             {booking.bikeCompany} {booking.bikeModel}
                                         </td>
 
-                                        <td style={{ width: "12%" }}>
+                                        <td style={{ width: "8%" }}>
                                             {booking.bikeNumPlate}
                                         </td>
 
-                                        <td style={{ width: "15%" }}>
+                                        <td style={{ width: "10%" }}>
                                             {booking.bikeService}
                                         </td>
 
-                                        <td style={{ width: "20%" }}>
+                                        <td style={{ width: "12%" }}>
                                             {booking.remarks || "—"}
+                                        </td>
+
+                                        <td style={{ width: "12%" }}>
+                                            {booking.mechanic_id ? (
+                                                <div>
+                                                    <div style={{ fontWeight: "600", color: "#28a745" }}>
+                                                        {booking.mechanic_id.fullName}
+                                                    </div>
+                                                    <small className="text-muted">
+                                                        {booking.mechanic_id.phone}
+                                                    </small>
+                                                </div>
+                                            ) : (
+                                                <span className="text-muted">Not assigned</span>
+                                            )}
+                                        </td>
+
+                                        <td style={{ width: "13%" }}>
+                                            <select
+                                                className="form-select form-select-sm"
+                                                value={booking.mechanic_id?._id || ""}
+                                                onChange={(e) =>
+                                                    assignMechanic(booking._id, e.target.value)
+                                                }
+                                                disabled={booking.status === "Completed"}
+                                            >
+                                                <option value="">Select Mechanic</option>
+                                                {mechanics.map((mechanic) => (
+                                                    <option key={mechanic._id} value={mechanic._id}>
+                                                        {mechanic.fullName}
+                                                    </option>
+                                                ))}
+                                            </select>
                                         </td>
 
                                         <td style={{ width: "10%" }}>
@@ -135,7 +206,7 @@ const BookingTable = ({ isCollapsed }) => {
                                             </span>
                                         </td>
 
-                                        <td style={{ width: "13%" }}>
+                                        <td style={{ width: "15%" }}>
 
                                             <select
                                                 className="form-select form-select-sm"
@@ -149,7 +220,6 @@ const BookingTable = ({ isCollapsed }) => {
                                                 <option>Confirmed</option>
                                                 <option>In Progress</option>
                                                 <option>Completed</option>
-                                                <option>Cancelled</option>
 
                                             </select>
 
@@ -163,8 +233,8 @@ const BookingTable = ({ isCollapsed }) => {
 
                                 <tr>
 
-                                    <td colSpan="7" className="text-center p-3">
-                                        No bookings found
+                                    <td colSpan="9" className="text-center p-3">
+                                        No active bookings found
                                     </td>
 
                                 </tr>

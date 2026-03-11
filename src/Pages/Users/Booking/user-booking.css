@@ -1,0 +1,109 @@
+/* Page background */
+
+.booking-section {
+    min-height: 100vh;
+    background: linear-gradient(135deg, #fff8e1, #ffd6cc, #f97673);
+    padding: 60px 20px;
+}
+
+/* Booking card */
+
+.booking-card {
+    background: rgba(255, 255, 255, 0.95);
+    border-radius: 16px;
+    backdrop-filter: blur(6px);
+    box-shadow: 0 20px 50px rgba(0, 0, 0, 0.15);
+    transition: all 0.3s ease;
+}
+
+.booking-card:hover {
+    transform: translateY(-3px);
+}
+
+/* Title */
+
+.booking-card h3 {
+    font-weight: 700;
+    color: #333;
+}
+
+/* Labels */
+
+.form-label {
+    font-weight: 600;
+    font-size: 14px;
+    color: #555;
+}
+
+/* Inputs */
+
+.form-control,
+.form-select {
+    border-radius: 8px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    transition: all 0.2s ease;
+}
+
+.form-control:focus,
+.form-select:focus {
+    border-color: #ff9800;
+    box-shadow: 0 0 0 2px rgba(255, 152, 0, 0.15);
+}
+
+/* Readonly fields */
+
+.bg-light {
+    background: #f6f6f6 !important;
+    font-weight: 500;
+}
+
+/* Radio buttons */
+
+.form-check-input {
+    cursor: pointer;
+}
+
+.form-check-label {
+    font-weight: 500;
+    cursor: pointer;
+}
+
+/* Pickup address */
+
+.booking-card input::placeholder,
+.booking-card textarea::placeholder {
+    color: #aaa;
+}
+
+/* Button */
+
+.btn-warning {
+    background: linear-gradient(135deg, #ff9800, #ff6a00);
+    border: none;
+    font-weight: 600;
+    font-size: 16px;
+    border-radius: 8px;
+    transition: all 0.25s ease;
+}
+
+.btn-warning:hover {
+    background: linear-gradient(135deg, #ff6a00, #ff3d00);
+    transform: translateY(-1px);
+}
+
+/* Textarea */
+
+textarea.form-control {
+    resize: none;
+}
+
+/* Mobile */
+
+@media (max-width: 768px) {
+
+    .booking-card {
+        padding: 25px;
+    }
+
+}

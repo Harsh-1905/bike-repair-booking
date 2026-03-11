@@ -239,7 +239,7 @@ const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
 
                                             <td>
                                                 {b.user_id
-                                                    ? `${b.user_id.firstName} ${b.user_id.lastName}`
+                                                    ? b.user_id.fullName
                                                     : "N/A"}
                                             </td>
 

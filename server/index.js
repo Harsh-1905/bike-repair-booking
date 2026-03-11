@@ -8,6 +8,9 @@ import mongoose from "mongoose";
 import route from "./route/userRoute.js";
 import session from "express-session"; // ✅ import session
 import passwordRoutes from "./route/passwordRoute.js";
+import productRoute from "./route/productRoute.js";
+import orderRoute from "./route/orderRoute.js";
+import mechanicRoute from "./route/mechanicRoute.js";
 
 
 const app = express();
@@ -34,6 +37,11 @@ app.use(session({
 
 // ✅ All API routes start with /api
 app.use("/api", route);
+app.use("/api/products", productRoute);
+app.use("/api", orderRoute);
+app.use("/api", mechanicRoute);
+app.use("/uploads", express.static("uploads"));
+app.use("/api", passwordRoutes);
 
 mongoose.connect(process.env.MONGO_URL)
     .then(() => console.log("✅ Database Connected Successfully"))
@@ -43,5 +51,4 @@ const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
 });
-app.use("/api", passwordRoutes);
 

@@ -133,6 +133,7 @@ export const updateUser = async (req, res) => {
 
 export const createBooking = async (req, res) => {
     try {
+        console.log("Received booking data:", req.body);
 
         // 🔎 Check if booking already exists for same bike and date
         const existing = await Booking.findOne({
@@ -159,6 +160,7 @@ export const createBooking = async (req, res) => {
         });
 
     } catch (error) {
+        console.error("Booking creation error:", error);
         res.status(500).json({
             success: false,
             message: "Failed to create booking",
@@ -170,7 +172,8 @@ export const createBooking = async (req, res) => {
 export const getAllBookings = async (req, res) => {
     try {
         const bookings = await Booking.find()
-            .populate("user_id", "firstName middleName lastName email contactNumber") // populate user details
+            .populate("user_id", "fullName email contactNumber")
+            .populate("mechanic_id", "fullName phone email")
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -236,6 +239,7 @@ export const getUserBookings = async (req, res) => {
     try {
         const { id } = req.params; // logged in user id
         const bookings = await Booking.find({ user_id: id })
+            .populate("mechanic_id", "fullName phone email")
             .sort({ createdAt: -1 });
 
         res.status(200).json({
@@ -278,3 +282,30 @@ export const deleteBooking = async (req, res) => {
 
 
 
+
+
+// Authentication middleware - works with user data sent from frontend
+export const authenticate = async (req, res, next) => {
+    try {
+        // Get user_id from headers (set by axios interceptor)
+        const user_id = req.headers['x-user-id'];
+        
+        if (!user_id) {
+            return res.status(401).json({
+                success: false,
+                message: "Authentication required. Please login."
+            });
+        }
+
+        // Create a simple user object with the ID
+        req.user = { _id: user_id };
+        return next();
+    } catch (error) {
+        console.error("Authentication error:", error);
+        return res.status(500).json({
+            success: false,
+            message: "Authentication error",
+            error: error.message
+        });
+    }
+};
