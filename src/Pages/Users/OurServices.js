@@ -5,7 +5,7 @@ import {
     faWrench, faTools, faCog, faBolt, faShieldAlt, 
     faMotorcycle, faBatteryFull, faOilCan, faCheckCircle, faArrowRight 
 } from "@fortawesome/free-solid-svg-icons";
-import "./public-pages.css";
+import "./ourservices.css";
 
 const Services = () => {
     const services = [

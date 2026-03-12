@@ -4,7 +4,6 @@ import api from "../../../Api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faShoppingBag} from "@fortawesome/free-solid-svg-icons";
 import { showSuccess, showError } from "../../../utils/toast";
-import { getProductImageURL } from "../../../utils/config";
 import "./my-orders.css";
 
 const MyOrders = () => {
@@ -119,7 +118,7 @@ const MyOrders = () => {
                                     {order.items.map((item, index) => (
                                         <div key={index} className="order-item">
                                             <img
-                                                src={getProductImageURL(item.image)}
+                                                src={`http://localhost:8000/uploads/productimages/${item.image}`}
                                                 alt={item.name}
                                             />
                                             <div className="item-info">

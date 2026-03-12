@@ -1,5 +1,13 @@
 import mongoose from "mongoose";
 
+/**
+ * User Schema with automatic timestamps
+ * - createdAt: Automatically set when user is created
+ * - updatedAt: Automatically updated when user data is modified
+ * 
+ * Note: Existing users in database may not have timestamps,
+ * only new registrations after this update will include them.
+ */
 const userSchema = new mongoose.Schema({
     fullName: {
         type: String,
@@ -40,5 +48,5 @@ const userSchema = new mongoose.Schema({
         type: Date,
         default: null
     }
-});
+}, { timestamps: true });
 export default mongoose.model("registration", userSchema)

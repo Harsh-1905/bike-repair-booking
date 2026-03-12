@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
-import { getApiBaseURL } from "../../../utils/config";
 
 import FilterSidebar from "../../../Components/Store/FilterSidebar";
 import ProductGrid from "../../../Components/Store/ProductGrid";
@@ -22,7 +21,7 @@ const Store = () => {
             try {
 
                 const res = await axios.get(
-                    `${getApiBaseURL()}/api/products`
+                    "http://localhost:8000/api/products"
                 );
 
                 setProducts(res.data);

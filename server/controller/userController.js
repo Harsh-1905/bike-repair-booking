@@ -2,6 +2,7 @@ import User from "../model/userModel.js";
 import Booking from "../model/bookModel.js";
 import Contact from "../model/contactmodel.js";
 import bcrypt from "bcryptjs";
+import { createBookingNotification } from "./notificationController.js";
 
 
 
@@ -43,7 +44,7 @@ export const create = async (req, res) => {
 
 export const getAllUsers = async (req, res) => {
     try {
-        const userData = await User.find();
+        const userData = await User.find().sort({ createdAt: -1 });
         if (!userData || userData.length === 0) {
             return res.status(404).json({ success: false, message: "User data not found" });
         }
@@ -124,6 +125,16 @@ export const updateUser = async (req, res) => {
         const updatedUser = await User.findByIdAndUpdate(id, updates, { new: true }).select('-password');
 
         if (!updatedUser) return res.status(404).json({ success: false, message: "User not found" });
+
+        // Send admin notification for profile update
+        try {
+            const { createAdminProfileNotification } = await import("./notificationController.js");
+            const userName = updatedUser.fullName || `${updatedUser.firstName || ''} ${updatedUser.lastName || ''}`.trim() || 'Customer';
+            await createAdminProfileNotification(updatedUser._id, userName);
+        } catch (notificationError) {
+            console.error("Error sending admin profile notification:", notificationError);
+            // Don't fail the update if notification fails
+        }
 
         res.status(200).json({ success: true, message: "User updated successfully", user: updatedUser });
     } catch (error) {
@@ -257,9 +268,82 @@ export const getUserBookings = async (req, res) => {
 export const updateBooking = async (req, res) => {
     try {
         const { id } = req.params;
-        const updated = await Booking.findByIdAndUpdate(id, req.body, { new: true });
+        const updateData = req.body;
+        
+        // Get the current booking to compare changes
+        const currentBooking = await Booking.findById(id)
+            .populate("mechanic_id", "fullName")
+            .populate("user_id", "fullName firstName lastName");
+        if (!currentBooking) {
+            return res.status(404).json({ success: false, message: "Booking not found" });
+        }
 
-        if (!updated) return res.status(404).json({ success: false, message: "Booking not found" });
+        const updated = await Booking.findByIdAndUpdate(id, updateData, { new: true })
+            .populate("mechanic_id", "fullName")
+            .populate("user_id", "fullName firstName lastName");
+
+        // Send notifications based on what was updated
+        try {
+            // Check if mechanic was assigned (admin action)
+            if (updateData.mechanic_id && !currentBooking.mechanic_id) {
+                await createBookingNotification(
+                    currentBooking.user_id._id,
+                    "mechanic_assigned",
+                    id,
+                    updated.mechanic_id?.fullName
+                );
+            }
+
+            // Check if status changed (admin action)
+            if (updateData.status && updateData.status !== currentBooking.status) {
+                let notificationType;
+                switch (updateData.status) {
+                    case "Confirmed":
+                        notificationType = "booking_confirmed";
+                        break;
+                    case "In Progress":
+                        notificationType = "booking_in_progress";
+                        break;
+                    case "Completed":
+                        notificationType = "booking_completed";
+                        break;
+                }
+                
+                if (notificationType) {
+                    await createBookingNotification(
+                        currentBooking.user_id._id,
+                        notificationType,
+                        id
+                    );
+                }
+            }
+
+            // Send admin notification if user updated booking details (not status/mechanic changes)
+            const userUpdatedFields = ['bikeCompany', 'bikeModel', 'bikeType', 'bikeNumPlate', 'bikeService', 'selectedServices', 'date', 'pickupDrop', 'pickupAddress', 'remarks'];
+            const hasUserUpdates = userUpdatedFields.some(field => updateData.hasOwnProperty(field));
+            
+            if (hasUserUpdates) {
+                const { createAdminBookingNotification } = await import("./notificationController.js");
+                const userName = currentBooking.user_id?.fullName || 
+                               `${currentBooking.user_id?.firstName || ''} ${currentBooking.user_id?.lastName || ''}`.trim() || 
+                               'Customer';
+                
+                let updateType = "updated";
+                if (updateData.status === "Cancelled") {
+                    updateType = "cancelled";
+                }
+                
+                await createAdminBookingNotification(
+                    currentBooking.user_id._id,
+                    userName,
+                    id,
+                    updateType
+                );
+            }
+        } catch (notificationError) {
+            console.error("Error sending notification:", notificationError);
+            // Don't fail the booking update if notification fails
+        }
 
         res.status(200).json({ success: true, message: "Booking updated successfully!", data: updated });
     } catch (error) {
@@ -305,6 +389,74 @@ export const authenticate = async (req, res, next) => {
         return res.status(500).json({
             success: false,
             message: "Authentication error",
+            error: error.message
+        });
+    }
+};
+// Get dashboard statistics
+export const getDashboardStats = async (req, res) => {
+    try {
+        console.log('Starting dashboard stats fetch...');
+
+        // Get basic counts without complex operations
+        const userCount = await User.countDocuments();
+        const bookingCount = await Booking.countDocuments();
+        
+        // Import additional models
+        const Mechanic = (await import("../model/mechanicModel.js")).default;
+        const Order = (await import("../model/orderModel.js")).default;
+        
+        const mechanicCount = await Mechanic.countDocuments();
+        const orderCount = await Order.countDocuments();
+
+        console.log('Basic counts:', {
+            users: userCount,
+            bookings: bookingCount,
+            mechanics: mechanicCount,
+            orders: orderCount
+        });
+
+        // Simple statistics without filtering
+        const stats = {
+            totalUsers: userCount,
+            totalBookings: bookingCount,
+            totalMechanics: mechanicCount,
+            totalOrders: orderCount,
+            pendingBookings: 0,
+            completedServices: 0,
+            pendingOrders: 0,
+            totalRevenue: 0
+        };
+
+        const revenueBreakdown = {
+            today: 0,
+            weekly: 0,
+            monthly: 0
+        };
+
+        const recentActivity = [];
+
+        const notifications = {
+            newOrders: 0,
+            cancelledOrders: 0,
+            newBookings: 0
+        };
+
+        res.status(200).json({
+            success: true,
+            data: {
+                stats,
+                revenueBreakdown,
+                recentActivity,
+                notifications
+            }
+        });
+
+    } catch (error) {
+        console.error('Dashboard stats error:', error);
+        res.status(500).json({
+            success: false,
+            message: "Failed to fetch dashboard statistics",
             error: error.message
         });
     }

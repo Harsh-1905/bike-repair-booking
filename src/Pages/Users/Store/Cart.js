@@ -4,7 +4,6 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faTrash, faShoppingCart, faArrowLeft } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import { showInfo } from "../../../utils/toast";
-import { getProductImageURL } from "../../../utils/config";
 import "./cart.css";
 
 const Cart = () => {
@@ -51,7 +50,7 @@ const Cart = () => {
                             <div key={item._id} className="cart-item-card">
                                 <div className="cart-item-image">
                                     <img
-                                        src={getProductImageURL(item.image)}
+                                        src={`http://localhost:8000/uploads/productimages/${item.image}`}
                                         alt={item.name}
                                     />
                                 </div>

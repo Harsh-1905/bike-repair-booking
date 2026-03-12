@@ -1,7 +1,6 @@
 import { useCart } from "./Cartcontext";
 import { showSuccess } from "../../../utils/toast";
 import { useNavigate } from "react-router-dom";
-import { getProductImageURL } from "../../../utils/config";
 import "./quickview.css";
 
 const QuickViewModal = ({ product, onClose }) => {
@@ -32,7 +31,7 @@ const QuickViewModal = ({ product, onClose }) => {
 
                     <div className="quickview-image">
                         <img
-                            src={getProductImageURL(product.image)}
+                            src={`http://localhost:8000/uploads/productimages/${product.image}`}
                             alt={product.name}
                         />
                     </div>

@@ -3,10 +3,9 @@ import api from "../../Api/axios";
 import { showError, showSuccess } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-    faMapMarkerAlt, faPhone, faEnvelope, 
-    faClock, faMotorcycle, faArrowRight 
+    faPhone, faMotorcycle, faArrowRight 
 } from "@fortawesome/free-solid-svg-icons";
-import "./public-pages.css";
+import "./contactus.css";
 
 const ContactUs = () => {
     const [formData, setFormData] = useState({
@@ -130,12 +129,12 @@ const ContactUs = () => {
                         </div>
 
                         {/* Contact Info */}
-                        <div className="col-lg-5 col-md-12">
+                        {/* <div className="col-lg-5 col-md-12">
                             <div className="contact-info">
-                                <h3 className="mb-4">Get in Touch</h3>
+                                 <h3 className="mb-4">Get in Touch</h3>
                                 <p className="text-muted mb-4">
                                     We're here to help! Reach out to us through any of the following channels.
-                                </p>
+                                </p> 
 
                                 <div className="contact-item">
                                     <div className="contact-icon">
@@ -176,8 +175,8 @@ const ContactUs = () => {
                                         <p>Monday - Saturday: 9:00 AM - 7:00 PM<br />Sunday: 10:00 AM - 5:00 PM</p>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
+                            </div> 
+                        </div>*/}
                     </div>
                 </div>
             </section>

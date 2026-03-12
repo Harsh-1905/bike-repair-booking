@@ -1,6 +1,7 @@
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faSignIn, faUserPlus, faUser, faSignOutAlt } from "@fortawesome/free-solid-svg-icons";
 import { Link, useNavigate } from 'react-router-dom';
+import Notifications from './Notifications';
 import '../index.css';
 
 const UserNavBar = ({ user, handleLogout }) => {
@@ -45,7 +46,14 @@ const UserNavBar = ({ user, handleLogout }) => {
                             <Link className="nav-link navlinktexts text-white" to="/my-orders">My Orders</Link>
                         </li>
                         <li className="nav-item">
+                            <Link className="nav-link navlinktexts text-white" to="/notifications">Notifications</Link>
+                        </li>
+                        <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/cart">Cart</Link>
+                        </li>
+                        {/* Notifications */}
+                        <li className="nav-item d-flex align-items-center">
+                            <Notifications user={user} />
                         </li>
                         {/* Dropdown for auth links */}
                         <li className="nav-item dropdown">

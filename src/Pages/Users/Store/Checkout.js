@@ -8,11 +8,8 @@ import { faArrowLeft, faShoppingBag } from "@fortawesome/free-solid-svg-icons";
 import { 
     loadRazorpayScript, 
     initializeRazorpayPayment, 
-    validatePaymentResponse,
-    createProductPaymentOrder,
-    verifyProductPayment
+    validatePaymentResponse
 } from "../../../utils/razorpay";
-import { getProductImageURL } from "../../../utils/config";
 import "./checkout.css";
 
 const Checkout = () => {
@@ -64,7 +61,7 @@ const Checkout = () => {
             if (paymentMethod === "COD") {
                 await handleCODOrder();
             } else {
-                await handleUPIOrder();
+                await handleOnlineOrder();
             }
         } catch (error) {
             console.error("Order error:", error);
@@ -97,7 +94,7 @@ const Checkout = () => {
         navigate(`/order-success/${response.data.order._id}`);
     };
 
-    const handleUPIOrder = async () => {
+    const handleOnlineOrder = async () => {
         // Load Razorpay script
         const isRazorpayLoaded = await loadRazorpayScript();
         if (!isRazorpayLoaded) {
@@ -122,15 +119,18 @@ const Checkout = () => {
         };
 
         // Create Razorpay order
-        const orderResponse = await createProductPaymentOrder(api, orderData, totalPrice);
+        const orderRes = await api.post("/payment/create-product-order", {
+            amount: totalPrice,
+            orderData
+        });
 
-        if (!orderResponse.success) {
-            throw new Error(orderResponse.message || "Failed to create payment order");
+        if (!orderRes.data.success) {
+            throw new Error(orderRes.data.message || "Failed to create payment order");
         }
 
-        const { order, key_id } = orderResponse;
+        const { order, key_id } = orderRes.data;
 
-        // Razorpay options for UPI-only payment
+        // Razorpay options
         const options = {
             key: key_id,
             amount: order.amount,
@@ -150,41 +150,25 @@ const Checkout = () => {
                 order_type: "product",
                 item_count: cartItems.length,
                 customer_email: user.email
-            },
-            // UPI-only configuration
-            config: {
-                display: {
-                    blocks: {
-                        utib: {
-                            name: 'Pay using UPI',
-                            instruments: [
-                                {
-                                    method: 'upi'
-                                }
-                            ]
-                        }
-                    },
-                    sequence: ['block.utib'],
-                    preferences: {
-                        show_default_blocks: false
-                    }
-                }
             }
         };
 
         try {
-            // Open Razorpay checkout with UPI-only
+            // Open Razorpay checkout
             const paymentResponse = await initializeRazorpayPayment(options);
             
             if (validatePaymentResponse(paymentResponse)) {
                 // Verify payment on backend
-                const verifyResponse = await verifyProductPayment(api, paymentResponse, orderData);
+                const verifyRes = await api.post("/payment/verify-product-payment", {
+                    ...paymentResponse,
+                    orderData
+                });
                 
-                if (verifyResponse.success) {
+                if (verifyRes.data.success) {
                     showSuccess("Payment successful! Order placed.");
-                    navigate(`/order-success/${verifyResponse.data._id}`);
+                    navigate(`/order-success/${verifyRes.data.data._id}`);
                 } else {
-                    throw new Error(verifyResponse.message || "Payment verification failed");
+                    throw new Error(verifyRes.data.message || "Payment verification failed");
                 }
             } else {
                 throw new Error("Invalid payment response");
@@ -315,7 +299,10 @@ const Checkout = () => {
                                                 checked={paymentMethod === "Online"}
                                                 onChange={(e) => setPaymentMethod(e.target.value)}
                                             />
-                                            <span>UPI Payment (PhonePe, GPay, Paytm, etc.)</span>
+                                            <span>Online Payment (Razorpay)</span>
+                                            <small className="payment-warning">
+                                                ⚠️ Note: Online payment orders cannot be cancelled
+                                            </small>
                                         </label>
                                     </div>
                                 </div>
@@ -326,9 +313,9 @@ const Checkout = () => {
                                     disabled={loading}
                                 >
                                     {loading ? (
-                                        paymentMethod === "Online" ? "Processing UPI Payment..." : "Placing Order..."
+                                        paymentMethod === "Online" ? "Processing Payment..." : "Placing Order..."
                                     ) : (
-                                        paymentMethod === "Online" ? "Pay with UPI" : "Place Order"
+                                        paymentMethod === "Online" ? "Pay Now" : "Place Order"
                                     )}
                                 </button>
                             </form>
@@ -342,7 +329,7 @@ const Checkout = () => {
                                 {cartItems.map((item) => (
                                     <div key={item._id} className="summary-item">
                                         <img
-                                            src={getProductImageURL(item.image)}
+                                            src={`http://localhost:8000/uploads/productimages/${item.image}`}
                                             alt={item.name}
                                         />
                                         <div className="item-info">

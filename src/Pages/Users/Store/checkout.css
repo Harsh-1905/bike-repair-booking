@@ -137,6 +137,15 @@
     color: #333;
 }
 
+.payment-warning {
+    display: block;
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-weight: 500;
+    margin-top: 0.25rem;
+    font-style: italic;
+}
+
 .place-order-btn {
     width: 100%;
     background: linear-gradient(135deg, #E43636, #c72828);

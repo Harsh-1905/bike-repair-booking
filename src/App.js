@@ -21,6 +21,7 @@ import UserHome from './Pages/Users/UserHomepage';
 import Services from './Pages/Users/OurServices';
 import { CartProvider } from "./Pages/Users/Store/Cartcontext";
 import OrdersTable from './Pages/admin/OrdersTable';
+import OrderHistory from './Pages/admin/OrderHistory';
 import AddProduct from './Pages/admin/AddProduct';
 import AddMechanic from './Pages/admin/AddMechanic';
 import BookingHistory from './Pages/admin/BookingHistory';
@@ -31,6 +32,7 @@ import Cart from './Pages/Users/Store/Cart';
 import Checkout from './Pages/Users/Store/Checkout';
 import OrderSuccess from './Pages/Users/Store/OrderSuccess';
 import MyOrders from './Pages/Users/Store/MyOrders';
+import NotificationsPage from './Pages/Users/Notifications';
 
 // Booking related imports
 import Booking from './Pages/Users/Booking/Booking';
@@ -99,8 +101,10 @@ function App() {
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/order-success/:orderId" element={<OrderSuccess />} />
           <Route path="/my-orders" element={<MyOrders />} />
+          <Route path="/notifications" element={<NotificationsPage />} />
           <Route path="/tracking" element={<Tracking />} />
           <Route path="/admin/orders" element={<OrdersTable isCollapsed={isCollapsed} />} />
+          <Route path="/admin/order-history" element={<OrderHistory isCollapsed={isCollapsed} />} />
           <Route path="/admin/add-product" element={<AddProduct isCollapsed={isCollapsed} />} />
           <Route path="/admin/add-mechanic" element={<AddMechanic isCollapsed={isCollapsed} />} />
           <Route path="/admin/booking-history" element={<BookingHistory isCollapsed={isCollapsed} />} />

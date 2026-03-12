@@ -5,7 +5,7 @@ import {
     faMotorcycle, faUsers, faTools, faClock, 
     faAward, faHandshake, faCheckCircle, faArrowRight 
 } from "@fortawesome/free-solid-svg-icons";
-import "./public-pages.css";
+import "./aboutus.css";
 
 const AboutUs = () => {
     return (
