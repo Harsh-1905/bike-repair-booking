@@ -12,7 +12,8 @@ import {
     deleteUser,
     getUserBookings,
     updateBooking,
-    deleteBooking
+    deleteBooking,
+    getDashboardStats
 } from "../controller/userController.js";
 
 
@@ -47,5 +48,8 @@ route.delete("/booking/:id", deleteBooking);
 // ContactUs
 route.post("/contact", createContact);
 route.get("/contacts", getAllContacts);
+
+// Dashboard Statistics
+route.get("/dashboard/stats", getDashboardStats);
 
 export default route;

@@ -1,5 +1,6 @@
 import Order from "../model/orderModel.js";
 import User from "../model/userModel.js";
+import { createOrderNotification } from "./notificationController.js";
 
 // Create new order
 export const createOrder = async (req, res) => {
@@ -53,6 +54,7 @@ export const getUserOrders = async (req, res) => {
 export const getAllOrders = async (req, res) => {
     try {
         const orders = await Order.find()
+            .populate('user_id', 'fullName firstName lastName email')
             .sort({ createdAt: -1 });
 
         res.status(200).json(orders);
@@ -86,14 +88,48 @@ export const updateOrderStatus = async (req, res) => {
         const { id } = req.params;
         const { orderStatus } = req.body;
 
+        // Get current order to compare status change
+        const currentOrder = await Order.findById(id);
+        if (!currentOrder) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+
         const order = await Order.findByIdAndUpdate(
             id,
             { orderStatus },
             { new: true }
         );
 
-        if (!order) {
-            return res.status(404).json({ message: "Order not found" });
+        // Send notification if status changed
+        if (orderStatus !== currentOrder.orderStatus) {
+            try {
+                let notificationType;
+                switch (orderStatus) {
+                    case "Processing":
+                        notificationType = "order_processing";
+                        break;
+                    case "Shipped":
+                        notificationType = "order_shipped";
+                        break;
+                    case "Delivered":
+                        notificationType = "order_delivered";
+                        break;
+                    case "Pending":
+                        notificationType = "order_confirmed";
+                        break;
+                }
+                
+                if (notificationType) {
+                    await createOrderNotification(
+                        currentOrder.user_id,
+                        notificationType,
+                        id
+                    );
+                }
+            } catch (notificationError) {
+                console.error("Error sending notification:", notificationError);
+                // Don't fail the order update if notification fails
+            }
         }
 
         res.status(200).json({

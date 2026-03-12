@@ -179,6 +179,32 @@
     transform: translateY(-2px);
 }
 
+.btn-cancel.disabled {
+    background: #6c757d;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.btn-cancel.disabled:hover {
+    background: #6c757d;
+    transform: none;
+}
+
+.cancel-restriction {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+}
+
+.cancel-note {
+    color: #dc3545;
+    font-size: 0.8rem;
+    font-style: italic;
+    text-align: center;
+    margin: 0;
+}
+
 .loading {
     text-align: center;
     font-size: 1.5rem;

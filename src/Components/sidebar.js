@@ -4,7 +4,7 @@ import api from "../Api/axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome, faUsers, faCalendarCheck, faAddressBook, faUserCircle,
-    faSignOutAlt, faShoppingBag, faPlus, faUserPlus, faWrench
+    faSignOutAlt, faShoppingBag, faPlus, faUserPlus, faWrench, faHistory
 } from "@fortawesome/free-solid-svg-icons";
 import '../index.css';
 
@@ -76,17 +76,14 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
                 <SidebarItem icon={faUsers} text="User Details" to="/userData" isActive={activePath === '/userData'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faCalendarCheck} text="Booking Management" to="/bookingstable" isActive={activePath === '/bookingstable'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faWrench} text="Booking History" to="/admin/booking-history" isActive={activePath === '/admin/booking-history'} isCollapsed={isCollapsed} />
-                <SidebarItem icon={faShoppingBag} text="Orders" to="/admin/orders" isActive={activePath === '/admin/orders'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faShoppingBag} text="Order Management" to="/admin/orders" isActive={activePath === '/admin/orders'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faHistory} text="Order History" to="/admin/order-history" isActive={activePath === '/admin/order-history'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faPlus} text="Add Product" to="/admin/add-product" isActive={activePath === '/admin/add-product'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserPlus} text="Add Mechanic" to="/admin/add-mechanic" isActive={activePath === '/admin/add-mechanic'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faAddressBook} text="Contact Details" to="/contactdetails" isActive={activePath === '/contactdetails'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserCircle} text="Profile" to="/profile" isActive={activePath === '/profile'} isCollapsed={isCollapsed} />
-            </ul>
-
-            <hr className="text-white-50" />
-
-            <ul className="nav nav-pills flex-column mb-auto">
-                <li className="nav-item mb-2">
+                
+                <li className="nav-item mb-2 mt-3">
                     <button
                         onClick={handleLogout}
                         className="nav-link text-white d-flex align-items-center py-2 w-100"

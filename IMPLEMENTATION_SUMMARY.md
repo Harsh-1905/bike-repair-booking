@@ -8,6 +8,7 @@
 3. ✅ **Mechanic Routes** (`server/route/mechanicRoute.js`) - API endpoints for mechanic management
 4. ✅ **Updated Booking Model** - Added `mechanic_id` field to link mechanics to bookings
 5. ✅ **Updated server/index.js** - Added mechanic routes
+6. ✅ **User Model Timestamps** (`server/model/userModel.js`) - Added automatic createdAt/updatedAt timestamps
 
 ### Frontend - Completed:
 1. ✅ **AddMechanic Component** (`src/Pages/admin/AddMechanic.js`) - Form to add new mechanics
@@ -18,6 +19,7 @@
 6. ✅ **Updated Sidebar** - Added "Add Mechanic" menu item
 7. ✅ **Updated UserNavBar** - Added "Track Bookings" menu item
 8. ✅ **Updated App.js** - Added routes for `/tracking` and `/admin/add-mechanic`
+9. ✅ **Admin Dashboard Enhancement** - Added registration timestamps and recent registrations tracking
 
 ## Features Implemented
 
@@ -31,6 +33,8 @@
 - **Add Mechanic** (`/admin/add-mechanic`) - Register new mechanics with full details
 - **Assign Mechanics** - In booking details, assign available mechanics to bookings
 - **Mechanic Management** - Full CRUD operations via API
+- **Registration Tracking** - View user registration dates and times in dashboard
+- **Recent Registrations** - Dashboard shows count of new registrations in last 7 days
 
 ## API Endpoints
 
@@ -79,3 +83,15 @@
 ## System Complete! 🎉
 
 All requested features have been implemented and integrated.
+
+## Recent Updates
+
+### User Registration Timestamps (Latest)
+- **Added automatic timestamps** to user model with `{ timestamps: true }`
+- **Enhanced admin dashboard** to show registration dates and times
+- **Added "New Registrations" card** showing count of registrations in last 7 days
+- **Improved recent activity** to display registration dates in user-friendly format
+- **Backward compatibility** - handles existing users without timestamps gracefully
+- **Real-time data** - dashboard shows actual registration times for new users
+
+**Note**: Only new user registrations after this update will have timestamps. Existing users in the database will not show registration dates until they update their profiles (which will add updatedAt timestamp).

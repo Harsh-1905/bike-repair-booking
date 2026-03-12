@@ -73,7 +73,13 @@ const Tracking = () => {
         }
     };
 
-    const handleCancelBooking = async (bookingId) => {
+    const handleCancelBooking = async (bookingId, paymentMethod) => {
+        // Check if booking was made with online payment
+        if (paymentMethod === "online") {
+            showError("Bookings paid online cannot be cancelled. Please contact support for assistance.");
+            return;
+        }
+
         if (!window.confirm("Are you sure you want to cancel this booking?")) {
             return;
         }
@@ -196,6 +202,12 @@ const Tracking = () => {
                                         <strong>₹{booking.price}</strong>
                                     </div>
                                     <div className="detail-row">
+                                        <span>Payment Method:</span>
+                                        <strong style={{ color: booking.paymentMethod === "online" ? "#007bff" : "#28a745" }}>
+                                            {booking.paymentMethod === "online" ? "Online Payment" : "Cash on Service"}
+                                        </strong>
+                                    </div>
+                                    <div className="detail-row">
                                         <span>Pickup & Drop:</span>
                                         <strong>{booking.pickupDrop === "yes" ? "Yes" : "No"}</strong>
                                     </div>
@@ -232,12 +244,27 @@ const Tracking = () => {
                                             >
                                                 <FontAwesomeIcon icon={faEdit} /> Edit
                                             </button>
-                                            <button
-                                                className="btn-cancel"
-                                                onClick={() => handleCancelBooking(booking._id)}
-                                            >
-                                                <FontAwesomeIcon icon={faTimes} /> Cancel
-                                            </button>
+                                            {booking.paymentMethod === "online" ? (
+                                                <div className="cancel-restriction">
+                                                    <button
+                                                        className="btn-cancel disabled"
+                                                        disabled
+                                                        title="Online payment bookings cannot be cancelled"
+                                                    >
+                                                        <FontAwesomeIcon icon={faTimes} /> Cancel
+                                                    </button>
+                                                    <small className="cancel-note">
+                                                        * Online payment bookings cannot be cancelled
+                                                    </small>
+                                                </div>
+                                            ) : (
+                                                <button
+                                                    className="btn-cancel"
+                                                    onClick={() => handleCancelBooking(booking._id, booking.paymentMethod)}
+                                                >
+                                                    <FontAwesomeIcon icon={faTimes} /> Cancel
+                                                </button>
+                                            )}
                                         </>
                                     )}
                                 </div>

@@ -1,4 +1,4 @@
-// Razorpay utility functions for UPI-only payments
+// Razorpay utility functions for localhost
 
 // Load Razorpay script
 export const loadRazorpayScript = () => {
@@ -11,30 +11,11 @@ export const loadRazorpayScript = () => {
     });
 };
 
-// Initialize Razorpay payment with UPI-only configuration
+// Initialize Razorpay payment
 export const initializeRazorpayPayment = (options) => {
     return new Promise((resolve, reject) => {
         const razorpay = new window.Razorpay({
             ...options,
-            // UPI-only configuration
-            config: {
-                display: {
-                    blocks: {
-                        utib: {
-                            name: 'Pay using UPI',
-                            instruments: [
-                                {
-                                    method: 'upi'
-                                }
-                            ]
-                        }
-                    },
-                    sequence: ['block.utib'],
-                    preferences: {
-                        show_default_blocks: false
-                    }
-                }
-            },
             handler: function (response) {
                 resolve(response);
             },
@@ -64,56 +45,4 @@ export const validatePaymentResponse = (response) => {
         response.razorpay_order_id &&
         response.razorpay_signature
     );
-};
-
-// Create booking payment order
-export const createBookingPaymentOrder = async (api, bookingData, totalAmount) => {
-    try {
-        const response = await api.post('/payment/create-booking-order', {
-            amount: totalAmount,
-            bookingData
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to create payment order');
-    }
-};
-
-// Create product payment order
-export const createProductPaymentOrder = async (api, orderData, totalAmount) => {
-    try {
-        const response = await api.post('/payment/create-product-order', {
-            amount: totalAmount,
-            orderData
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Failed to create payment order');
-    }
-};
-
-// Verify booking payment
-export const verifyBookingPayment = async (api, paymentResponse, bookingData) => {
-    try {
-        const response = await api.post('/payment/verify-booking-payment', {
-            ...paymentResponse,
-            bookingData
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Payment verification failed');
-    }
-};
-
-// Verify product payment
-export const verifyProductPayment = async (api, paymentResponse, orderData) => {
-    try {
-        const response = await api.post('/payment/verify-product-payment', {
-            ...paymentResponse,
-            orderData
-        });
-        return response.data;
-    } catch (error) {
-        throw new Error(error.response?.data?.message || 'Payment verification failed');
-    }
 };

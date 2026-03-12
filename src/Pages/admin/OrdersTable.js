@@ -3,7 +3,6 @@ import api from "../../Api/axios";
 import { showSuccess, showError } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye, faEdit } from "@fortawesome/free-solid-svg-icons";
-import { getProductImageURL } from "../../utils/config";
 import "./orders-table.css";
 
 const OrdersTable = ({ isCollapsed }) => {
@@ -20,7 +19,11 @@ const OrdersTable = ({ isCollapsed }) => {
     const fetchOrders = async () => {
         try {
             const response = await api.get("/orders/all");
-            setOrders(response.data);
+            // Filter out delivered and cancelled orders (show only active orders)
+            const activeOrders = response.data.filter(
+                (order) => order.orderStatus !== "Delivered" && order.orderStatus !== "Cancelled"
+            );
+            setOrders(activeOrders);
         } catch (error) {
             console.error("Error fetching orders:", error);
             
@@ -90,7 +93,7 @@ const OrdersTable = ({ isCollapsed }) => {
         >
             <div className="orders-header">
                 <h2>Order Management</h2>
-                <p>Total Orders: {orders.length}</p>
+                <p>Active Orders: {orders.length}</p>
             </div>
 
             <div className="table-responsive">
@@ -210,7 +213,7 @@ const OrdersTable = ({ isCollapsed }) => {
                                 {selectedOrder.items.map((item, index) => (
                                     <div key={index} className="order-item-detail">
                                         <img
-                                            src={getProductImageURL(item.image)}
+                                            src={`http://localhost:8000/uploads/productimages/${item.image}`}
                                             alt={item.name}
                                         />
                                         <div className="item-info">
@@ -233,6 +236,7 @@ const OrdersTable = ({ isCollapsed }) => {
                                     <option value="Processing">Processing</option>
                                     <option value="Shipped">Shipped</option>
                                     <option value="Delivered">Delivered</option>
+                                    <option value="Cancelled">Cancelled</option>
                                 </select>
                                 <button className="btn-update" onClick={handleStatusUpdate}>
                                     Update Status

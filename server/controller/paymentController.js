@@ -3,7 +3,7 @@ import crypto from 'crypto';
 import Booking from '../model/bookModel.js';
 import Order from '../model/orderModel.js';
 
-// Create Razorpay order for booking
+// Create Razorpay order for service booking
 export const createBookingOrder = async (req, res) => {
     try {
         const { amount, currency = 'INR', bookingData } = req.body;
@@ -155,7 +155,7 @@ export const verifyProductPayment = async (req, res) => {
         // Payment verified, create order
         const finalOrderData = {
             ...orderData,
-            paymentMethod: 'online',
+            paymentMethod: 'Online',
             paymentStatus: 'paid',
             razorpayOrderId: razorpay_order_id,
             razorpayPaymentId: razorpay_payment_id
@@ -201,65 +201,5 @@ export const handlePaymentFailure = async (req, res) => {
             message: 'Error processing payment failure',
             error: error.message
         });
-    }
-};
-
-// Webhook handler for payment updates
-export const handleWebhook = async (req, res) => {
-    try {
-        const webhookSignature = req.headers['x-razorpay-signature'];
-        const webhookBody = JSON.stringify(req.body);
-
-        // Verify webhook signature
-        const expectedSignature = crypto
-            .createHmac('sha256', process.env.RAZORPAY_WEBHOOK_SECRET)
-            .update(webhookBody)
-            .digest('hex');
-
-        if (webhookSignature !== expectedSignature) {
-            return res.status(400).json({ message: 'Invalid webhook signature' });
-        }
-
-        const event = req.body.event;
-        const paymentEntity = req.body.payload.payment.entity;
-
-        switch (event) {
-            case 'payment.captured':
-                // Update booking/order status to confirmed
-                await Promise.all([
-                    Booking.findOneAndUpdate(
-                        { razorpayPaymentId: paymentEntity.id },
-                        { paymentStatus: 'paid', status: 'confirmed' }
-                    ),
-                    Order.findOneAndUpdate(
-                        { razorpayPaymentId: paymentEntity.id },
-                        { paymentStatus: 'paid', status: 'confirmed' }
-                    )
-                ]);
-                break;
-
-            case 'payment.failed':
-                // Update booking/order status to failed
-                await Promise.all([
-                    Booking.findOneAndUpdate(
-                        { razorpayOrderId: paymentEntity.order_id },
-                        { paymentStatus: 'failed', status: 'cancelled' }
-                    ),
-                    Order.findOneAndUpdate(
-                        { razorpayOrderId: paymentEntity.order_id },
-                        { paymentStatus: 'failed', status: 'cancelled' }
-                    )
-                ]);
-                break;
-
-            default:
-                console.log('Unhandled webhook event:', event);
-        }
-
-        res.status(200).json({ message: 'Webhook processed successfully' });
-
-    } catch (error) {
-        console.error('Webhook error:', error);
-        res.status(500).json({ message: 'Webhook processing failed' });
     }
 };

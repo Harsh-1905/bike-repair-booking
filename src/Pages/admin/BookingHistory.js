@@ -1,6 +1,17 @@
 import React, { useEffect, useState } from "react";
 import api from "../../Api/axios";
-import "./booking-history.css";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { 
+    faHistory, 
+    faMotorcycle, 
+    faUser, 
+    faCalendarAlt, 
+    faCheckCircle,
+    faTimesCircle,
+    faWrench,
+    faRupeeSign
+} from "@fortawesome/free-solid-svg-icons";
+import "./admin-tables.css";
 
 const BookingHistory = ({ isCollapsed }) => {
     const [bookings, setBookings] = useState([]);
@@ -29,14 +40,19 @@ const BookingHistory = ({ isCollapsed }) => {
             });
     };
 
-    const getStatusClass = (status) => {
+    const getStatusIcon = (status) => {
         switch (status) {
-            case "Completed":
-                return "badge bg-success";
-            case "Cancelled":
-                return "badge bg-danger";
-            default:
-                return "badge bg-secondary";
+            case "Completed": return faCheckCircle;
+            case "Cancelled": return faTimesCircle;
+            default: return faHistory;
+        }
+    };
+
+    const getStatusColor = (status) => {
+        switch (status) {
+            case "Completed": return "#28a745";
+            case "Cancelled": return "#dc3545";
+            default: return "#6c757d";
         }
     };
 
@@ -47,128 +63,170 @@ const BookingHistory = ({ isCollapsed }) => {
 
     if (loading) {
         return (
-            <div
-                style={{
-                    marginLeft: isCollapsed ? "80px" : "250px",
-                    padding: "20px",
-                    transition: "margin-left 0.3s ease",
-                }}
-            >
-                <div className="text-center p-5">Loading...</div>
+            <div className="admin-page" style={{ marginLeft: isCollapsed ? '80px' : '250px' }}>
+                <div className="admin-container">
+                    <div className="loading-card">
+                        <div className="loading-spinner"></div>
+                        <p>Loading booking history...</p>
+                    </div>
+                </div>
             </div>
         );
     }
 
     return (
-        <div
-            style={{
-                marginLeft: isCollapsed ? "80px" : "250px",
-                padding: "20px",
-                transition: "margin-left 0.3s ease",
-            }}
-        >
-            <div className="booking-history-header">
-                <h2 className="mb-3">Booking History</h2>
-                <div className="filter-buttons">
-                    <button
-                        className={`filter-btn ${filter === "all" ? "active" : ""}`}
-                        onClick={() => setFilter("all")}
-                    >
-                        All ({bookings.length})
-                    </button>
-                    <button
-                        className={`filter-btn ${filter === "completed" ? "active" : ""}`}
-                        onClick={() => setFilter("completed")}
-                    >
-                        Completed ({bookings.filter((b) => b.status === "Completed").length})
-                    </button>
-                    <button
-                        className={`filter-btn ${filter === "cancelled" ? "active" : ""}`}
-                        onClick={() => setFilter("cancelled")}
-                    >
-                        Cancelled ({bookings.filter((b) => b.status === "Cancelled").length})
-                    </button>
-                </div>
-            </div>
-
-            {filteredBookings.length === 0 ? (
-                <div className="card shadow-sm">
-                    <div className="card-body text-center p-5">
-                        <p className="text-muted mb-0">No booking history found</p>
+        <div className="admin-page" style={{ marginLeft: isCollapsed ? '80px' : '250px' }}>
+            <div className="admin-container">
+                <div className="page-header">
+                    <div className="header-content">
+                        <div className="header-icon">
+                            <FontAwesomeIcon icon={faHistory} />
+                        </div>
+                        <div className="header-text">
+                            <h1>Booking History</h1>
+                            <p>View completed and cancelled bookings</p>
+                        </div>
+                    </div>
+                    <div className="stats-badge">
+                        <span className="stats-number">{bookings.length}</span>
+                        <span className="stats-label">Total History</span>
                     </div>
                 </div>
-            ) : (
-                <div className="card shadow-sm">
-                    <div className="card-body p-0">
-                        <table className="table table-hover align-middle mb-0">
-                            <thead className="table-dark">
+
+                <div className="simple-table-card">
+                    <div className="table-header">
+                        <h3>
+                            <FontAwesomeIcon icon={faMotorcycle} className="me-2" />
+                            Service History
+                        </h3>
+                        <div className="filter-buttons">
+                            <button
+                                className={`filter-btn ${filter === "all" ? "active" : ""}`}
+                                onClick={() => setFilter("all")}
+                            >
+                                All ({bookings.length})
+                            </button>
+                            <button
+                                className={`filter-btn ${filter === "completed" ? "active" : ""}`}
+                                onClick={() => setFilter("completed")}
+                            >
+                                <FontAwesomeIcon icon={faCheckCircle} />
+                                Completed ({bookings.filter((b) => b.status === "Completed").length})
+                            </button>
+                            <button
+                                className={`filter-btn ${filter === "cancelled" ? "active" : ""}`}
+                                onClick={() => setFilter("cancelled")}
+                            >
+                                <FontAwesomeIcon icon={faTimesCircle} />
+                                Cancelled ({bookings.filter((b) => b.status === "Cancelled").length})
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div className="simple-table-container">
+                        <table className="simple-table history-table">
+                            <thead>
                                 <tr>
-                                    <th>Owner</th>
-                                    <th>Bike</th>
-                                    <th>Number</th>
+                                    <th>Customer</th>
+                                    <th>Vehicle</th>
                                     <th>Service</th>
+                                    <th>Booked On</th>
+                                    <th>Service Date</th>
                                     <th>Mechanic</th>
-                                    <th>Date</th>
                                     <th>Price</th>
                                     <th>Status</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                {filteredBookings.map((booking) => (
+                                {filteredBookings.length > 0 ? filteredBookings.map((booking) => (
                                     <tr key={booking._id}>
-                                        <td style={{ width: "12%" }}>
-                                            {booking.user_id
-                                                ? booking.user_id.fullName
-                                                : "N/A"}
+                                        <td className="name-cell">
+                                            {booking.user_id ? booking.user_id.fullName : "N/A"}
                                         </td>
-
-                                        <td style={{ width: "12%" }}>
-                                            {booking.bikeCompany} {booking.bikeModel}
+                                        <td>
+                                            <div className="vehicle-info">
+                                                <div className="vehicle-name">
+                                                    {booking.bikeCompany} {booking.bikeModel}
+                                                </div>
+                                                <div className="vehicle-number">
+                                                    {booking.bikeNumPlate}
+                                                </div>
+                                            </div>
                                         </td>
-
-                                        <td style={{ width: "10%" }}>{booking.bikeNumPlate}</td>
-
-                                        <td style={{ width: "15%" }}>{booking.bikeService}</td>
-
-                                        <td style={{ width: "15%" }}>
+                                        <td className="subject-cell">
+                                            {booking.bikeService}
+                                        </td>
+                                        <td className="date-cell">
+                                            <div className="date-value">
+                                                {new Date(booking.createdAt).toLocaleDateString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric"
+                                                })}
+                                            </div>
+                                            <div className="time-value">
+                                                {new Date(booking.createdAt).toLocaleTimeString("en-IN", {
+                                                    hour: "2-digit",
+                                                    minute: "2-digit",
+                                                    hour12: true
+                                                })}
+                                            </div>
+                                        </td>
+                                        <td className="date-cell">
+                                            <div className="date-value">
+                                                {new Date(booking.date).toLocaleDateString("en-IN", {
+                                                    day: "2-digit",
+                                                    month: "short",
+                                                    year: "numeric"
+                                                })}
+                                            </div>
+                                        </td>
+                                        <td>
                                             {booking.mechanic_id ? (
                                                 <div>
-                                                    <div style={{ fontWeight: "600" }}>
+                                                    <div className="name-cell">
                                                         {booking.mechanic_id.fullName}
                                                     </div>
-                                                    <small className="text-muted">
+                                                    <div style={{ color: '#666', fontSize: '0.85rem' }}>
                                                         {booking.mechanic_id.phone}
-                                                    </small>
+                                                    </div>
                                                 </div>
                                             ) : (
-                                                <span className="text-muted">Not assigned</span>
+                                                <span style={{ color: '#999', fontStyle: 'italic' }}>Not assigned</span>
                                             )}
                                         </td>
-
-                                        <td style={{ width: "12%" }}>
-                                            {new Date(booking.date).toLocaleDateString("en-IN", {
-                                                year: "numeric",
-                                                month: "short",
-                                                day: "numeric",
-                                            })}
-                                        </td>
-
-                                        <td style={{ width: "10%" }}>
-                                            <strong>₹{booking.price}</strong>
-                                        </td>
-
-                                        <td style={{ width: "10%" }}>
-                                            <span className={getStatusClass(booking.status)}>
+                                        <td className="subject-cell">₹{booking.price}</td>
+                                        <td>
+                                            <span 
+                                                className="status-badge" 
+                                                style={{ 
+                                                    backgroundColor: getStatusColor(booking.status),
+                                                    color: 'white',
+                                                    padding: '4px 8px',
+                                                    borderRadius: '12px',
+                                                    fontSize: '0.8rem',
+                                                    fontWeight: '600'
+                                                }}
+                                            >
                                                 {booking.status}
                                             </span>
                                         </td>
                                     </tr>
-                                ))}
+                                )) : (
+                                    <tr>
+                                        <td colSpan="8" className="empty-row">
+                                            <div className="empty-state">
+                                                <FontAwesomeIcon icon={faHistory} className="empty-icon" />
+                                                <span>No history found for the selected filter</span>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                )}
                             </tbody>
                         </table>
                     </div>
                 </div>
-            )}
+            </div>
         </div>
     );
 };
