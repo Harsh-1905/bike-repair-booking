@@ -14,86 +14,88 @@ function ServiceSelection() {
         <div className="service-page-bg">
             <div className="container service-container">
 
-                <h2 className="text-center section-title">Choose Your Service</h2>
+                <h2 className="section-title">Choose Your Service</h2>
 
-                {/* All Over Service */}
-                <div className="service-card premium-service">
+                <div className="services-grid">
+                    {/* All Over Service */}
+                    <div className="service-card premium-service">
 
-                    <div className="service-header">
-                        <h3>All Over Service</h3>
-                        <div className="price">₹999</div>
+                        <div className="service-header">
+                            <h3>All Over Service</h3>
+                            <div className="price">₹999</div>
+                        </div>
+
+                        <ul className="service-list">
+                            <li>Engine oil change</li>
+                            <li>Brake inspection</li>
+                            <li>Chain lubrication</li>
+                            <li>Battery check</li>
+                            <li>Air filter cleaning</li>
+                            <li>Full bike inspection</li>
+                        </ul>
+
+                        <button
+                            className="book-btn"
+                            onClick={() => bookService("All-Over Service", 999)}
+                        >
+                            Book Now
+                        </button>
+
                     </div>
 
-                    <ul className="service-list">
-                        <li>Engine oil change</li>
-                        <li>Brake inspection</li>
-                        <li>Chain lubrication</li>
-                        <li>Battery check</li>
-                        <li>Air filter cleaning</li>
-                        <li>Full bike inspection</li>
-                    </ul>
+                    {/* General Service */}
+                    <div className="service-card basic-service">
 
-                    <button
-                        className="book-btn"
-                        onClick={() => bookService("All-Over Service", 999)}
-                    >
-                        Book Now
-                    </button>
+                        <div className="service-header">
+                            <h3>General Service</h3>
+                            <div className="price">₹499</div>
+                        </div>
 
-                </div>
+                        <ul className="service-list">
+                            <li>Oil check</li>
+                            <li>Brake adjustment</li>
+                            <li>Chain tightening</li>
+                            <li>Tyre pressure check</li>
+                            <li>Basic inspection</li>
+                        </ul>
 
-                {/* General Service */}
-                <div className="service-card basic-service">
+                        <button
+                            className="book-btn"
+                            onClick={() => bookService("General Service", 499)}
+                        >
+                            Book Now
+                        </button>
 
-                    <div className="service-header">
-                        <h3>General Service</h3>
-                        <div className="price">₹499</div>
                     </div>
 
-                    <ul className="service-list">
-                        <li>Oil check</li>
-                        <li>Brake adjustment</li>
-                        <li>Chain tightening</li>
-                        <li>Tyre pressure check</li>
-                        <li>Basic inspection</li>
-                    </ul>
+                    {/* Customize Service */}
+                    <div className="service-card customize-service">
 
-                    <button
-                        className="book-btn"
-                        onClick={() => bookService("General Service", 499)}
-                    >
-                        Book Now
-                    </button>
+                        <div className="service-header">
+                            <h3>Customize Service</h3>
+                            <div className="price">Custom</div>
+                        </div>
 
-                </div>
+                        <p className="custom-desc">
+                            Choose only the services your bike needs. Select multiple options
+                            and the total price will be calculated automatically.
+                        </p>
 
-                {/* Customize Service */}
-                <div className="service-card customize-service">
+                        <ul className="service-list">
+                            <li>Select individual services</li>
+                            <li>Flexible pricing</li>
+                            <li>Pay only for what you choose</li>
+                            <li>Best for minor issues</li>
+                        </ul>
 
-                    <div className="service-header">
-                        <h3>Customize Service</h3>
-                        <div className="price">Custom</div>
+                        <button
+                            className="book-btn customize-btn"
+                            onClick={() => navigate("/customselection", { replace: false })}
+                        >
+                            Customize Now
+                        </button>
+
                     </div>
-
-                    <p className="custom-desc">
-                        Choose only the services your bike needs. Select multiple options
-                        and the total price will be calculated automatically.
-                    </p>
-
-                    <ul className="service-list">
-                        <li>Select individual services</li>
-                        <li>Flexible pricing</li>
-                        <li>Pay only for what you choose</li>
-                        <li>Best for minor issues</li>
-                    </ul>
-
-                    <button
-                        className="book-btn customize-btn"
-                        onClick={() => navigate("/customselection", { replace: false })}
-                    >
-                        Customize Now
-                    </button>
-
                 </div>
 
             </div>

@@ -48,6 +48,8 @@ function UserBooking() {
     const [showManualModel, setShowManualModel] = useState(false);
     const [manualCompany, setManualCompany] = useState("");
     const [manualModel, setManualModel] = useState("");
+    const [pickupAddress, setPickupAddress] = useState("");
+    const [errors, setErrors] = useState({});
 
     const bikeTypes = ["Bike", "Moped"];
     const companies = Object.keys(bikeData);
@@ -107,16 +109,101 @@ function UserBooking() {
 
     }, [location]);
 
-    const proceedToBilling = async () => {
-
-        const selectedDate = new Date(date);
-        const today = new Date();
-        today.setHours(0, 0, 0, 0);
-
-        if (selectedDate < today) {
-            alert("You cannot select a past date");
-            return;
+    // Validation functions
+    const validateField = (fieldName, value) => {
+        let error = "";
+        
+        switch (fieldName) {
+            case "bikeType":
+                if (!value) error = "Please select bike type";
+                break;
+            case "bikeCompany":
+                if (!value && !manualCompany) error = "Please select or enter bike company";
+                break;
+            case "manualCompany":
+                if (bikeCompany === "Other" && !value) error = "Please enter bike company";
+                if (value && value.length < 2) error = "Company name must be at least 2 characters";
+                break;
+            case "bikeModel":
+                if (!value && !manualModel) error = "Please select or enter bike model";
+                break;
+            case "manualModel":
+                if (bikeModel === "Other" && !value) error = "Please enter bike model";
+                if (value && value.length < 2) error = "Model name must be at least 2 characters";
+                break;
+            case "bikeNumPlate":
+                if (!value) {
+                    error = "Please enter number plate";
+                } else if (!/^[A-Z]{2}[0-9]{2}[A-Z]{1,2}[0-9]{4}$/i.test(value.replace(/\s/g, ""))) {
+                    error = "Invalid number plate format (e.g., GJ01AB1234)";
+                }
+                break;
+            case "date":
+                if (!value) {
+                    error = "Please select service date";
+                } else {
+                    const selectedDate = new Date(value);
+                    const today = new Date();
+                    today.setHours(0, 0, 0, 0);
+                    if (selectedDate < today) {
+                        error = "Cannot select past date";
+                    }
+                }
+                break;
+            case "pickupAddress":
+                if (pickupDrop === "yes" && !value) {
+                    error = "Please enter pickup address";
+                } else if (value && value.length < 10) {
+                    error = "Please enter complete address (minimum 10 characters)";
+                }
+                break;
+            default:
+                break;
         }
+        
+        setErrors(prev => ({
+            ...prev,
+            [fieldName]: error
+        }));
+        
+        return error === "";
+    };
+
+    const validateAllFields = () => {
+        const finalCompany = bikeCompany === "Other" ? manualCompany : bikeCompany;
+        const finalModel = bikeModel === "Other" ? manualModel : bikeModel;
+        
+        const fieldsToValidate = [
+            ["bikeType", bikeType],
+            ["bikeCompany", finalCompany],
+            ["bikeModel", finalModel],
+            ["bikeNumPlate", bikeNumPlate],
+            ["date", date]
+        ];
+        
+        if (bikeCompany === "Other") {
+            fieldsToValidate.push(["manualCompany", manualCompany]);
+        }
+        
+        if (bikeModel === "Other") {
+            fieldsToValidate.push(["manualModel", manualModel]);
+        }
+        
+        if (pickupDrop === "yes") {
+            fieldsToValidate.push(["pickupAddress", pickupAddress]);
+        }
+        
+        let isValid = true;
+        fieldsToValidate.forEach(([fieldName, value]) => {
+            if (!validateField(fieldName, value)) {
+                isValid = false;
+            }
+        });
+        
+        return isValid;
+    };
+
+    const proceedToBilling = async () => {
         const user = JSON.parse(localStorage.getItem("user"));
 
         if (!user) {
@@ -124,42 +211,29 @@ function UserBooking() {
             return;
         }
 
+        // Validate all fields
+        if (!validateAllFields()) {
+            alert("Please fix the errors and try again");
+            return;
+        }
+
         // Determine final company and model values
         const finalCompany = bikeCompany === "Other" ? manualCompany : bikeCompany;
         const finalModel = bikeModel === "Other" ? manualModel : bikeModel;
-
-        if (!finalCompany) {
-            alert("Please enter bike company");
-            return;
-        }
-
-        if (!finalModel) {
-            alert("Please enter bike model");
-            return;
-        }
-
-        if (!bikeNumPlate) {
-            alert("Please enter bike number plate");
-            return;
-        }
-
-        if (!date) {
-            alert("Please select service date");
-            return;
-        }
 
         const bookingData = {
             user_id: user._id,
             bikeCompany: finalCompany,
             bikeModel: finalModel,
             bikeType,
-            bikeNumPlate,
+            bikeNumPlate: bikeNumPlate.replace(/\s/g, "").toUpperCase(), // Clean and uppercase
             bikeService,
             selectedServices,
             price: servicePrice,
             date,
             remarks,
-            pickupDrop
+            pickupDrop,
+            pickupAddress: pickupDrop === "yes" ? pickupAddress : ""
         };
 
         // Navigate to billing page with booking data
@@ -184,22 +258,30 @@ function UserBooking() {
 
                                 <div className="col-md-6">
                                     <select
-                                        className="form-select"
+                                        className={`form-select ${errors.bikeType ? 'is-invalid' : ''}`}
                                         value={bikeType}
-                                        onChange={(e) => setBikeType(e.target.value)}
+                                        onChange={(e) => {
+                                            setBikeType(e.target.value);
+                                            validateField("bikeType", e.target.value);
+                                        }}
                                     >
-                                        <option value="">Select Bike Type</option>
+                                        <option value="">Select Bike Type *</option>
                                         {bikeTypes.map((type, index) => (
                                             <option key={index} value={type}>
                                                 {type}
                                             </option>
                                         ))}
                                     </select>
+                                    {errors.bikeType && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.bikeType}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="col-md-6">
                                     <select
-                                        className="form-select"
+                                        className={`form-select ${errors.bikeCompany ? 'is-invalid' : ''}`}
                                         value={bikeCompany}
                                         onChange={(e) => {
                                             setBikeCompany(e.target.value);
@@ -207,10 +289,11 @@ function UserBooking() {
                                             if (e.target.value !== "Other") {
                                                 setManualCompany("");
                                             }
+                                            validateField("bikeCompany", e.target.value);
                                         }}
                                         disabled={!bikeType}
                                     >
-                                        <option value="">Select Bike Company</option>
+                                        <option value="">Select Bike Company *</option>
                                         {companies.map((company, index) => (
                                             <option key={index} value={company}>
                                                 {company}
@@ -218,23 +301,37 @@ function UserBooking() {
                                         ))}
                                         <option value="Other">Other (Specify)</option>
                                     </select>
+                                    {errors.bikeCompany && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.bikeCompany}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {showManualCompany && (
                                     <div className="col-md-6">
                                         <input
                                             type="text"
-                                            className="form-control"
-                                            placeholder="Enter Bike Company"
+                                            className={`form-control ${errors.manualCompany ? 'is-invalid' : ''}`}
+                                            placeholder="Enter Bike Company *"
                                             value={manualCompany}
-                                            onChange={(e) => setManualCompany(e.target.value)}
+                                            onChange={(e) => {
+                                                setManualCompany(e.target.value);
+                                                validateField("manualCompany", e.target.value);
+                                            }}
+                                            maxLength="50"
                                         />
+                                        {errors.manualCompany && (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.manualCompany}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
                                 <div className="col-md-6">
                                     <select
-                                        className="form-select"
+                                        className={`form-select ${errors.bikeModel ? 'is-invalid' : ''}`}
                                         value={bikeModel}
                                         onChange={(e) => {
                                             setBikeModel(e.target.value);
@@ -242,10 +339,11 @@ function UserBooking() {
                                             if (e.target.value !== "Other") {
                                                 setManualModel("");
                                             }
+                                            validateField("bikeModel", e.target.value);
                                         }}
                                         disabled={!bikeCompany || !bikeType || (bikeCompany === "Other" && !manualCompany)}
                                     >
-                                        <option value="">Select Bike Model</option>
+                                        <option value="">Select Bike Model *</option>
                                         {availableModels.map((model, index) => (
                                             <option key={index} value={model}>
                                                 {model}
@@ -253,28 +351,52 @@ function UserBooking() {
                                         ))}
                                         <option value="Other">Other (Specify)</option>
                                     </select>
+                                    {errors.bikeModel && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.bikeModel}
+                                        </div>
+                                    )}
                                 </div>
 
                                 {showManualModel && (
                                     <div className="col-md-6">
                                         <input
                                             type="text"
-                                            className="form-control"
-                                            placeholder="Enter Bike Model"
+                                            className={`form-control ${errors.manualModel ? 'is-invalid' : ''}`}
+                                            placeholder="Enter Bike Model *"
                                             value={manualModel}
-                                            onChange={(e) => setManualModel(e.target.value)}
+                                            onChange={(e) => {
+                                                setManualModel(e.target.value);
+                                                validateField("manualModel", e.target.value);
+                                            }}
+                                            maxLength="50"
                                         />
+                                        {errors.manualModel && (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.manualModel}
+                                            </div>
+                                        )}
                                     </div>
                                 )}
 
                                 <div className="col-md-6">
                                     <input
                                         type="text"
-                                        className="form-control"
-                                        placeholder="Number Plate (e.g., GJ01AB1234)"
+                                        className={`form-control ${errors.bikeNumPlate ? 'is-invalid' : ''}`}
+                                        placeholder="Number Plate (e.g., GJ01AB1234) *"
                                         value={bikeNumPlate}
-                                        onChange={(e) => setBikeNumPlate(e.target.value)}
+                                        onChange={(e) => {
+                                            const value = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+                                            setBikeNumPlate(value);
+                                            validateField("bikeNumPlate", value);
+                                        }}
+                                        maxLength="10"
                                     />
+                                    {errors.bikeNumPlate && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.bikeNumPlate}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="col-md-6">
@@ -298,14 +420,22 @@ function UserBooking() {
                                 </div>
 
                                 <div className="col-md-6">
-                                    <label className="form-label">Service Date</label>
+                                    <label className="form-label">Service Date *</label>
                                     <input
                                         type="date"
-                                        className="form-control"
+                                        className={`form-control ${errors.date ? 'is-invalid' : ''}`}
                                         value={date}
                                         min={minDate}
-                                        onChange={(e) => setDate(e.target.value)}
+                                        onChange={(e) => {
+                                            setDate(e.target.value);
+                                            validateField("date", e.target.value);
+                                        }}
                                     />
+                                    {errors.date && (
+                                        <div className="invalid-feedback d-block">
+                                            {errors.date}
+                                        </div>
+                                    )}
                                 </div>
 
                                 <div className="col-12">
@@ -342,9 +472,20 @@ function UserBooking() {
 
                                     <div className="col-12">
                                         <input
-                                            className="form-control"
-                                            placeholder="Pickup Address"
+                                            className={`form-control ${errors.pickupAddress ? 'is-invalid' : ''}`}
+                                            placeholder="Pickup Address *"
+                                            value={pickupAddress}
+                                            onChange={(e) => {
+                                                setPickupAddress(e.target.value);
+                                                validateField("pickupAddress", e.target.value);
+                                            }}
+                                            maxLength="200"
                                         />
+                                        {errors.pickupAddress && (
+                                            <div className="invalid-feedback d-block">
+                                                {errors.pickupAddress}
+                                            </div>
+                                        )}
                                     </div>
 
                                 )}
@@ -353,11 +494,15 @@ function UserBooking() {
 
                                     <textarea
                                         className="form-control"
-                                        placeholder="Remarks"
+                                        placeholder="Remarks (Optional)"
                                         rows="3"
                                         value={remarks}
                                         onChange={(e) => setRemarks(e.target.value)}
+                                        maxLength="500"
                                     />
+                                    <small className="text-muted">
+                                        {remarks.length}/500 characters
+                                    </small>
 
                                 </div>
                                 <div className="col-12">

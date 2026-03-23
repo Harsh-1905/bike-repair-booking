@@ -65,68 +65,89 @@ function CustomizeSelection() {
         navigate(`/booking?service=Customize Service&price=${totalPrice}&services=${encodeURIComponent(JSON.stringify(selectedServices))}`);
     };
 
+    const selectedCount = services.filter(s => s.selected).length;
+
     return (
         <div className="custom-bg">
 
             <div className="container customize-container">
 
-                <h2 className="text-center title">Customize Your Service</h2>
+                <h2 className="title">Customize Your Service</h2>
 
-                <p className="text-center subtitle">
+                <p className="subtitle">
                     Select the services you want. Total price will update automatically.
                 </p>
 
-                <div className="service-box">
+                <div className="customize-layout">
+                    
+                    <div className="service-box">
+                        <div className="services-grid">
+                            {services.map((service, index) => (
 
-                    {services.map((service, index) => (
+                                <div 
+                                    key={index} 
+                                    className={`service-item ${service.selected ? 'selected' : ''}`}
+                                    onClick={() => toggleService(index)}
+                                >
 
-                        <div key={index} className="service-item">
+                                    <div className="checkbox-col">
 
-                            <div className="checkbox-col">
+                                        <input
+                                            type="checkbox"
+                                            checked={service.selected}
+                                            onChange={() => toggleService(index)}
+                                            onClick={(e) => e.stopPropagation()}
+                                        />
 
-                                <input
-                                    type="checkbox"
-                                    checked={service.selected}
-                                    onChange={() => toggleService(index)}
-                                />
+                                    </div>
 
+                                    <div className="service-name">
+                                        {service.name}
+                                    </div>
+
+                                    <div className="service-price">
+                                        ₹{service.price}
+                                    </div>
+
+                                </div>
+
+                            ))}
+                        </div>
+                    </div>
+
+                    <div className="customize-sidebar">
+                        
+                        <div className="action-buttons">
+                            <button className="clear-btn" onClick={clearSelections}>
+                                Clear All Selections
+                            </button>
+                        </div>
+
+                        <div className="total-box">
+
+                            <h3>Order Summary</h3>
+
+                            <div className="total-price">
+                                ₹{totalPrice}
                             </div>
-
-                            <div className="service-name">
-                                {service.name}
-                            </div>
-
-                            <div className="service-price">
-                                ₹{service.price}
+                            
+                            <div className="selected-count">
+                                {selectedCount} service{selectedCount !== 1 ? 's' : ''} selected
                             </div>
 
                         </div>
 
-                    ))}
-
-                </div>
-
-                <div className="action-buttons">
-
-                    <button className="clear-btn" onClick={clearSelections}>
-                        Cancel All Selection
-                    </button>
-
-                </div>
-
-                <div className="total-box">
-
-                    <h3>Total Price</h3>
-
-                    <div className="total-price">
-                        ₹{totalPrice}
+                        <button 
+                            className="book-btn" 
+                            onClick={bookCustomService}
+                            disabled={totalPrice === 0}
+                        >
+                            Book Customized Service
+                        </button>
+                        
                     </div>
-
+                    
                 </div>
-
-                <button className="book-btn" onClick={bookCustomService}>
-                    Book Customized Service
-                </button>
 
             </div>
 
