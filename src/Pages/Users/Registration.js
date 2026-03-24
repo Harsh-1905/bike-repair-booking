@@ -7,6 +7,7 @@ const Registration = () => {
     const navigate = useNavigate();
     const [fullName, setFullName] = useState("");
     const [contactNumber, setContactNumber] = useState("");
+    const [contactNumberError, setContactNumberError] = useState("");
     const [address, setAddress] = useState("");
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
@@ -15,10 +16,34 @@ const Registration = () => {
     const clearData = () => {
         setFullName("");
         setContactNumber("");
+        setContactNumberError("");
         setAddress("");
         setEmail("");
         setPassword("");
         setConfirmPassword("");
+    };
+
+    const handleContactNumberChange = (e) => {
+        const value = e.target.value;
+        
+        // Allow only digits
+        const numericValue = value.replace(/\D/g, '');
+        
+        // Limit to 11 digits maximum
+        const limitedValue = numericValue.slice(0, 11);
+        
+        setContactNumber(limitedValue);
+        
+        // Validate phone number
+        if (limitedValue.length === 0) {
+            setContactNumberError("");
+        } else if (limitedValue.length < 10) {
+            setContactNumberError("Phone number must be at least 10 digits");
+        } else if (limitedValue.length > 11) {
+            setContactNumberError("Phone number cannot exceed 11 digits");
+        } else {
+            setContactNumberError("");
+        }
     };
 
     const handleSubmit = (e) => {
@@ -26,6 +51,18 @@ const Registration = () => {
 
         if (!fullName || !contactNumber || !address || !email || !password || !confirmPassword) {
             showError("Please fill all required fields");
+            return;
+        }
+
+        // Validate phone number
+        if (contactNumber.length < 10 || contactNumber.length > 11) {
+            showError("Phone number must be between 10-11 digits");
+            return;
+        }
+
+        // Additional phone number format validation
+        if (!/^\d{10,11}$/.test(contactNumber)) {
+            showError("Phone number must contain only digits");
             return;
         }
 
@@ -41,12 +78,6 @@ const Registration = () => {
 
         if (password !== confirmPassword) {
             showError("Passwords do not match");
-            return;
-        }
-
-        const allowedAddresses = ["bardoli", "surat", "navsari", "vyara"];
-        if (!allowedAddresses.includes(address.trim().toLowerCase())) {
-            showError("We are currently operating only in Bardoli, Surat, Navsari, Vyara");
             return;
         }
 
@@ -129,18 +160,35 @@ const Registration = () => {
                         <input
                             type="tel"
                             value={contactNumber}
-                            onChange={(e) => setContactNumber(e.target.value)}
-                            maxLength="10"
-                            placeholder="Enter 10-digit mobile number"
+                            onChange={handleContactNumberChange}
+                            placeholder="Enter 10-11 digit mobile number"
                             style={{
                                 width: "100%",
                                 padding: "10px",
-                                border: "2px solid #ddd",
+                                border: `2px solid ${contactNumberError ? '#dc3545' : '#ddd'}`,
                                 borderRadius: "8px",
                                 fontSize: "1rem"
                             }}
                             required
                         />
+                        {contactNumberError && (
+                            <small style={{ 
+                                color: "#dc3545", 
+                                fontSize: "0.8rem", 
+                                marginTop: "0.25rem", 
+                                display: "block" 
+                            }}>
+                                {contactNumberError}
+                            </small>
+                        )}
+                        <small style={{ 
+                            color: "#666", 
+                            fontSize: "0.75rem", 
+                            marginTop: "0.25rem", 
+                            display: "block" 
+                        }}>
+                            Enter 10 digits for mobile or 11 digits with country code
+                        </small>
                     </div>
 
                     <div style={{ marginBottom: "1rem" }}>
@@ -171,7 +219,7 @@ const Registration = () => {
                             type="text"
                             value={address}
                             onChange={(e) => setAddress(e.target.value)}
-                            placeholder="Bardoli, Surat, Navsari, or Vyara"
+                            placeholder="Enter your complete address"
                             style={{
                                 width: "100%",
                                 padding: "10px",
