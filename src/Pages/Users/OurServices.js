@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     faWrench, faTools, faCog, faBolt, faShieldAlt, 
-    faMotorcycle, faBatteryFull, faOilCan, faCheckCircle, faArrowRight 
+    faMotorcycle, faBatteryFull, faCheckCircle, faArrowRight,
+    faGlobe, faEnvelope, faPhone, faMapMarkerAlt,faBoltLightning,faWater
 } from "@fortawesome/free-solid-svg-icons";
 import "./ourservices.css";
 
@@ -28,8 +29,6 @@ const Services = () => {
             price: "₹999",
             description: "Comprehensive service with advanced diagnostics and premium care.",
             features: [
-                "Engine oil change",
-                "Brake inspection & repair",
                 "Chain lubrication & adjustment",
                 "Battery check & maintenance",
                 "Air filter cleaning",
@@ -129,7 +128,7 @@ const Services = () => {
                                         </div>
                                         <div className="service-info">
                                             <h3>{service.title}</h3>
-                                            <div className="price">{service.price}</div>
+                                            {/* <div className="price">{service.price}</div> */}
                                         </div>
                                     </div>
                                     
@@ -177,10 +176,10 @@ const Services = () => {
                         <div className="col-lg-4 col-md-6 col-sm-12">
                             <div className="feature-card">
                                 <div className="feature-icon">
-                                    <FontAwesomeIcon icon={faOilCan} />
+                                    <FontAwesomeIcon icon={faBoltLightning} />
                                 </div>
-                                <h4>Oil Change</h4>
-                                <p>Regular oil changes with high-quality engine oil to keep your bike running smoothly and efficiently.</p>
+                                <h4>Emergency Breakdown Assistance</h4>
+                                <p> We provide On-call Support during emergency. Flat tyre Repair , Battery jump start.</p>
                             </div>
                         </div>
                         
@@ -191,6 +190,15 @@ const Services = () => {
                                 </div>
                                 <h4>Safety Inspection</h4>
                                 <p>Comprehensive safety checks to ensure your bike meets all safety standards and regulations.</p>
+                            </div>
+                        </div>
+                         <div className="col-lg-4 col-md-6 col-sm-12">
+                            <div className="feature-card">
+                                <div className="feature-icon">
+                                    <FontAwesomeIcon icon={faWater} />
+                                </div>
+                                <h4>Bike Washing and Detailing</h4>
+                                <p>The bike washing is very important before service . We wash bikes with skill and precision.</p>
                             </div>
                         </div>
                     </div>
@@ -218,6 +226,74 @@ const Services = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Footer */}
+            <footer className="footer">
+                <div className="container">
+                    <div className="row gy-4">
+                        {/* Brand Info */}
+                        <div className="col-md-4">
+                            <h4 className="footer-logo">BikeCare</h4>
+                            <p className="footer-text">
+                                Professional bike repair and servicing at your doorstep. 
+                                Reliable mechanics. Affordable pricing. Easy booking.
+                            </p>
+                        </div>
+
+                        {/* Quick Links */}
+                        <div className="col-md-2">
+                            <h5 className="footer-heading">Quick Links</h5>
+                            <ul className="footer-links">
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/ourservices">Services</Link></li>
+                                <li><Link to="/signup">Book Service</Link></li>
+                                <li><Link to="/login">Login</Link></li>
+                                <li><Link to="/signup">Register</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Services */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Our Services</h5>
+                            <ul className="footer-links">
+                                <li><Link to="/ourservices">General Service</Link></li>
+                                <li><Link to="/ourservices">Brake Repair</Link></li>
+                                <li><Link to="/ourservices">Chain & Gear</Link></li>
+                                <li><Link to="/ourservices">Flat Tyre Repair</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Contact */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Contact Us</h5>
+                            <p className="footer-contact">
+                                📍 Bardoli-Isroli Road, Gujarat, India <br />
+                                📞 +91 99252 99383 <br />
+                                📞 +91 76228 99383
+                            </p>
+                            <div className="contact-icons mt-3">
+                                <a href="#" aria-label="Website">
+                                    <FontAwesomeIcon icon={faGlobe} />
+                                </a>
+                                <a href="#" aria-label="Email">
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                </a>
+                                <a href="#" aria-label="Phone">
+                                    <FontAwesomeIcon icon={faPhone} />
+                                </a>
+                                <a href="#" aria-label="Location">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="footer-bottom text-center">
+                    <p>© 2026 BikeCare. All Rights Reserved.</p>
+                </div>
+            </footer>
         </div>
     );
 };

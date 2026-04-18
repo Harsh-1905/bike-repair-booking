@@ -1,6 +1,7 @@
 import Navbar from './Components/Navbar';
 import UserNavBar from './Components/UserNavBar';
 import Sidebar from './Components/sidebar';
+import ScrollToTop from './Components/ScrollToTop';
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Home from './Pages/Users/Home';
 import Registration from './Pages/Users/Registration';
@@ -68,6 +69,7 @@ function App() {
   return (
     <CartProvider>
       <Router>
+        <ScrollToTop />
         {/* ✅ Show correct navbar */}
         {!user && <Navbar />}
         {user?.userType === "user" && <UserNavBar user={user} handleLogout={handleLogout} />}

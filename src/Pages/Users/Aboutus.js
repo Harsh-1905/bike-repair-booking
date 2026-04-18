@@ -3,7 +3,8 @@ import { Link } from "react-router-dom";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     faMotorcycle, faUsers, faTools, faClock, 
-    faAward, faHandshake, faCheckCircle, faArrowRight 
+    faAward, faHandshake, faCheckCircle, faArrowRight,
+    faGlobe, faEnvelope, faPhone, faMapMarkerAlt
 } from "@fortawesome/free-solid-svg-icons";
 import "./aboutus.css";
 
@@ -78,26 +79,26 @@ const AboutUs = () => {
                     <div className="row g-4 mb-5">
                         <div className="col-lg-3 col-md-6 col-sm-6">
                             <div className="stat-item text-center">
-                                <span className="stat-number">500+</span>
+                                <span className="stat-number">400+</span>
                                 <span className="stat-label">Happy Customers</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-6">
                             <div className="stat-item text-center">
-                                <span className="stat-number">5+</span>
+                                <span className="stat-number">10+</span>
                                 <span className="stat-label">Years Experience</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-6">
                             <div className="stat-item text-center">
-                                <span className="stat-number">1000+</span>
+                                <span className="stat-number">700+</span>
                                 <span className="stat-label">Bikes Serviced</span>
                             </div>
                         </div>
                         <div className="col-lg-3 col-md-6 col-sm-6">
                             <div className="stat-item text-center">
-                                <span className="stat-number">24/7</span>
-                                <span className="stat-label">Support Available</span>
+                                <span className="stat-number">100%</span>
+                                <span className="stat-label">After Sale Service Available</span>
                             </div>
                         </div>
                     </div>
@@ -201,6 +202,74 @@ const AboutUs = () => {
                     </div>
                 </div>
             </section>
+
+            {/* Footer */}
+            <footer className="footer">
+                <div className="container">
+                    <div className="row gy-4">
+                        {/* Brand Info */}
+                        <div className="col-md-4">
+                            <h4 className="footer-logo">BikeCare</h4>
+                            <p className="footer-text">
+                                Professional bike repair and servicing at your doorstep. 
+                                Reliable mechanics. Affordable pricing. Easy booking.
+                            </p>
+                        </div>
+
+                        {/* Quick Links */}
+                        <div className="col-md-2">
+                            <h5 className="footer-heading">Quick Links</h5>
+                            <ul className="footer-links">
+                                <li><Link to="/">Home</Link></li>
+                                <li><Link to="/ourservices">Services</Link></li>
+                                <li><Link to="/signup">Book Service</Link></li>
+                                <li><Link to="/login">Login</Link></li>
+                                <li><Link to="/signup">Register</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Services */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Our Services</h5>
+                            <ul className="footer-links">
+                                <li><Link to="/ourservices">General Service</Link></li>
+                                <li><Link to="/ourservices">Brake Repair</Link></li>
+                                <li><Link to="/ourservices">Chain & Gear</Link></li>
+                                <li><Link to="/ourservices">Flat Tyre Repair</Link></li>
+                            </ul>
+                        </div>
+
+                        {/* Contact */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Contact Us</h5>
+                            <p className="footer-contact">
+                                📍 Bardoli-Isroli Road, Gujarat, India <br />
+                                📞 +91 99252 99383 <br />
+                                📞 +91 76228 99383
+                            </p>
+                            <div className="contact-icons mt-3">
+                                <a href="#" aria-label="Website">
+                                    <FontAwesomeIcon icon={faGlobe} />
+                                </a>
+                                <a href="#" aria-label="Email">
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                </a>
+                                <a href="#" aria-label="Phone">
+                                    <FontAwesomeIcon icon={faPhone} />
+                                </a>
+                                <a href="#" aria-label="Location">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="footer-bottom text-center">
+                    <p>© 2026 BikeCare. All Rights Reserved.</p>
+                </div>
+            </footer>
         </div>
     );
 };

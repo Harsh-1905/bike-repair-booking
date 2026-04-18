@@ -38,6 +38,47 @@ export const forgotPassword = async (req, res) => {
 };
 
 
+export const verifyOtp = async (req, res) => {
+    try {
+        const { email, otp } = req.body;
+
+        const user = await User.findOne({ email }).select("+resetOtp");
+        if (!user) {
+            return res.status(404).json({
+                success: false,
+                message: "User not found"
+            });
+        }
+
+        if (user.resetOtpExpiry < Date.now()) {
+            return res.status(400).json({
+                success: false,
+                message: "OTP expired. Please request a new one."
+            });
+        }
+
+        const isOtpValid = await bcrypt.compare(otp, user.resetOtp);
+        if (!isOtpValid) {
+            return res.status(400).json({
+                success: false,
+                message: "Invalid OTP. Please check and try again."
+            });
+        }
+
+        res.status(200).json({
+            success: true,
+            message: "OTP verified successfully"
+        });
+
+    } catch (error) {
+        console.error("OTP verification error:", error);
+        res.status(500).json({
+            success: false,
+            message: "Server error"
+        });
+    }
+};
+
 export const resetPassword = async (req, res) => {
     const { email, otp, newPassword } = req.body;
 
