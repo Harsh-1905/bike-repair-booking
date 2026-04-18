@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import api from "../../Api/axios";
 import { useNavigate, Link } from "react-router-dom";
 import { showError, showSuccess } from "../../utils/toast";
@@ -12,6 +12,18 @@ const Registration = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
+    const [isMobile, setIsMobile] = useState(false);
+
+    useEffect(() => {
+        const checkScreenSize = () => {
+            setIsMobile(window.innerWidth < 768);
+        };
+        
+        checkScreenSize();
+        window.addEventListener('resize', checkScreenSize);
+        
+        return () => window.removeEventListener('resize', checkScreenSize);
+    }, []);
 
     const clearData = () => {
         setFullName("");
@@ -119,180 +131,210 @@ const Registration = () => {
         }}>
             <div style={{
                 background: "white",
-                padding: "2rem",
-                borderRadius: "15px",
-                boxShadow: "0 10px 30px rgba(0,0,0,0.1)",
+                padding: "3rem",
+                borderRadius: "20px",
+                boxShadow: "0 15px 40px rgba(0,0,0,0.12)",
                 width: "100%",
-                maxWidth: "500px"
+                maxWidth: "700px",
+                minHeight: "580px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center"
             }}>
-                <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#333" }}>
+                <h2 style={{ textAlign: "center", marginBottom: "1rem", color: "#333", fontSize: "2rem", fontWeight: "700" }}>
                     Create Account
                 </h2>
-                <p style={{ textAlign: "center", color: "#666", marginBottom: "2rem" }}>
+                <p style={{ textAlign: "center", color: "#666", marginBottom: "2rem", fontSize: "1rem" }}>
                     Register to continue to BikeCare
                 </p>
                 
                 <form onSubmit={handleSubmit}>
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Full Name *
-                        </label>
-                        <input
-                            type="text"
-                            value={fullName}
-                            onChange={(e) => setFullName(e.target.value)}
-                            placeholder="Enter your full name"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: "2px solid #ddd",
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
+                    {/* First Row - Full Name and Mobile Number */}
+                    <div style={{ 
+                        display: "flex", 
+                        gap: "1.5rem", 
+                        marginBottom: "1.5rem",
+                        flexDirection: isMobile ? "column" : "row"
+                    }}>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Full Name *
+                            </label>
+                            <input
+                                type="text"
+                                value={fullName}
+                                onChange={(e) => setFullName(e.target.value)}
+                                placeholder="Enter your full name"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: "2px solid #ddd",
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                        </div>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Mobile Number *
+                            </label>
+                            <input
+                                type="tel"
+                                value={contactNumber}
+                                onChange={handleContactNumberChange}
+                                placeholder="10-11 digit number"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: `2px solid ${contactNumberError ? '#dc3545' : '#ddd'}`,
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                            {contactNumberError && (
+                                <small style={{ 
+                                    color: "#dc3545", 
+                                    fontSize: "0.8rem", 
+                                    marginTop: "0.3rem", 
+                                    display: "block" 
+                                }}>
+                                    {contactNumberError}
+                                </small>
+                            )}
+                        </div>
                     </div>
 
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Mobile Number *
-                        </label>
-                        <input
-                            type="tel"
-                            value={contactNumber}
-                            onChange={handleContactNumberChange}
-                            placeholder="Enter 10-11 digit mobile number"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: `2px solid ${contactNumberError ? '#dc3545' : '#ddd'}`,
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
-                        {contactNumberError && (
-                            <small style={{ 
-                                color: "#dc3545", 
-                                fontSize: "0.8rem", 
-                                marginTop: "0.25rem", 
-                                display: "block" 
-                            }}>
-                                {contactNumberError}
-                            </small>
-                        )}
-                        <small style={{ 
-                            color: "#666", 
-                            fontSize: "0.75rem", 
-                            marginTop: "0.25rem", 
-                            display: "block" 
-                        }}>
-                            Enter 10 digits for mobile or 11 digits with country code
-                        </small>
+                    {/* Second Row - Email and Address */}
+                    <div style={{ 
+                        display: "flex", 
+                        gap: "1.5rem", 
+                        marginBottom: "1.5rem",
+                        flexDirection: isMobile ? "column" : "row"
+                    }}>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Email *
+                            </label>
+                            <input
+                                type="email"
+                                value={email}
+                                onChange={(e) => setEmail(e.target.value)}
+                                placeholder="Enter your email"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: "2px solid #ddd",
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                        </div>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Address *
+                            </label>
+                            <input
+                                type="text"
+                                value={address}
+                                onChange={(e) => setAddress(e.target.value)}
+                                placeholder="Enter your address"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: "2px solid #ddd",
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                        </div>
                     </div>
 
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Email *
-                        </label>
-                        <input
-                            type="email"
-                            value={email}
-                            onChange={(e) => setEmail(e.target.value)}
-                            placeholder="Enter your email address"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: "2px solid #ddd",
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Address *
-                        </label>
-                        <input
-                            type="text"
-                            value={address}
-                            onChange={(e) => setAddress(e.target.value)}
-                            placeholder="Enter your complete address"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: "2px solid #ddd",
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: "1rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Password *
-                        </label>
-                        <input
-                            type="password"
-                            value={password}
-                            onChange={(e) => setPassword(e.target.value)}
-                            minLength="6"
-                            placeholder="Minimum 6 characters"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: "2px solid #ddd",
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
-                    </div>
-
-                    <div style={{ marginBottom: "2rem" }}>
-                        <label style={{ display: "block", marginBottom: "0.5rem", fontWeight: "600" }}>
-                            Confirm Password *
-                        </label>
-                        <input
-                            type="password"
-                            value={confirmPassword}
-                            onChange={(e) => setConfirmPassword(e.target.value)}
-                            placeholder="Re-enter your password"
-                            style={{
-                                width: "100%",
-                                padding: "10px",
-                                border: "2px solid #ddd",
-                                borderRadius: "8px",
-                                fontSize: "1rem"
-                            }}
-                            required
-                        />
+                    {/* Third Row - Password and Confirm Password */}
+                    <div style={{ 
+                        display: "flex", 
+                        gap: "1.5rem", 
+                        marginBottom: "2rem",
+                        flexDirection: isMobile ? "column" : "row"
+                    }}>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Password *
+                            </label>
+                            <input
+                                type="password"
+                                value={password}
+                                onChange={(e) => setPassword(e.target.value)}
+                                minLength="6"
+                                placeholder="Min 6 characters"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: "2px solid #ddd",
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                        </div>
+                        <div style={{ flex: "1" }}>
+                            <label style={{ display: "block", marginBottom: "0.6rem", fontWeight: "600", fontSize: "1rem", color: "#333" }}>
+                                Confirm Password *
+                            </label>
+                            <input
+                                type="password"
+                                value={confirmPassword}
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                placeholder="Re-enter password"
+                                style={{
+                                    width: "100%",
+                                    padding: "12px 15px",
+                                    border: "2px solid #ddd",
+                                    borderRadius: "10px",
+                                    fontSize: "1rem",
+                                    boxSizing: "border-box",
+                                    transition: "border-color 0.3s ease"
+                                }}
+                                required
+                            />
+                        </div>
                     </div>
 
                     <button 
                         type="submit"
                         style={{
                             width: "100%",
-                            padding: "12px",
+                            padding: "14px",
                             background: "linear-gradient(45deg, #f97673, #E43636)",
                             color: "white",
                             border: "none",
                             borderRadius: "25px",
-                            fontSize: "1rem",
+                            fontSize: "1.1rem",
                             fontWeight: "600",
                             cursor: "pointer",
-                            transition: "all 0.3s ease"
+                            transition: "all 0.3s ease",
+                            boxShadow: "0 4px 15px rgba(233, 54, 54, 0.3)"
                         }}
                     >
                         Register
                     </button>
                 </form>
 
-                <p style={{ textAlign: "center", marginTop: "1rem", fontSize: "0.9rem" }}>
-                    Already have an account? <Link to="/signin" style={{ color: "#E43636", textDecoration: "none" }}>Login</Link>
+                <p style={{ textAlign: "center", marginTop: "1.2rem", fontSize: "1rem" }}>
+                    Already have an account? <Link to="/signin" style={{ color: "#E43636", textDecoration: "none", fontWeight: "600" }}>Login</Link>
                 </p>
             </div>
         </div>

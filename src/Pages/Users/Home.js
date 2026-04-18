@@ -43,7 +43,7 @@ const Home = () => {
                                             <FontAwesomeIcon icon={faMotorcycle} />
                                         </div>
                                         <div className="stat-info">
-                                            <span className="stat-number">500+</span>
+                                            <span className="stat-number">700+</span>
                                             <span className="stat-label">Bikes Serviced</span>
                                         </div>
                                     </div>
@@ -53,7 +53,7 @@ const Home = () => {
                                             <FontAwesomeIcon icon={faUserTie} />
                                         </div>
                                         <div className="stat-info">
-                                            <span className="stat-number">10+</span>
+                                            <span className="stat-number">5+</span>
                                             <span className="stat-label">Expert Mechanics</span>
                                         </div>
                                     </div>
@@ -63,7 +63,8 @@ const Home = () => {
                                             <FontAwesomeIcon icon={faTools} />
                                         </div>
                                         <div className="stat-info">
-                                            <span className="stat-label">Professional Equipment</span>
+                                            <span className="stat-number">10+</span>
+                                            <span className="stat-label">Years of Experience</span>
                                         </div>
                                     </div> 
                                     
@@ -72,8 +73,8 @@ const Home = () => {
                                             <FontAwesomeIcon icon={faCheckCircle} />
                                         </div>
                                         <div className="stat-info">
-                                            <span className="stat-number">100%</span>
-                                            <span className="stat-label">Satisfaction Rate</span>
+                                            <span className="stat-number">400+</span>
+                                            <span className="stat-label">Satisfied Customers</span>
                                         </div>
                                     </div>
                                 </div>
@@ -202,6 +203,16 @@ const Home = () => {
                                 <h4>Custom Service</h4>
                                 <p>Choose exactly what your bike needs with our customizable service options.</p>
                                 <div className="service-price">Custom Pricing</div>
+                            </div>
+                        </div>
+                        <div className="col-lg-4 col-md-6 col-sm-12">
+                            <div className="service-card">
+                                <div className="service-icon">
+                                    <FontAwesomeIcon icon={faCheckCircle} />
+                                </div>
+                                <h4>Basic Service</h4>
+                                <p>Basic Services like Tyre Inflating,Headlight Setting,Brake Setting,Clutch Setting</p>
+                                <div className="service-price">Starting at ₹199</div>
                             </div>
                         </div>
                     </div>
