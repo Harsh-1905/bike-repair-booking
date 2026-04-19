@@ -113,7 +113,7 @@
 
 .table-header {
     background: linear-gradient(135deg, #E43636, #c72828);
-    color: white;
+    color: rgb(12, 12, 12);
     padding: 20px 30px;
     display: flex;
     justify-content: space-between;
@@ -135,7 +135,7 @@
 }
 
 .filter-btn {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(240, 30, 30, 0.2);
     color: white;
     border: 1px solid rgba(255, 255, 255, 0.3);
     padding: 8px 16px;
@@ -404,17 +404,6 @@
     gap: 2px;
 }
 
-.date-value {
-    font-weight: 600;
-    color: #333;
-    font-size: 0.95rem;
-}
-
-.time-value {
-    color: #999;
-    font-size: 0.85rem;
-}
-
 /* Empty State */
 .empty-row {
     text-align: center;
@@ -444,7 +433,7 @@
     .modern-table {
         font-size: 0.9rem;
     }
-    
+
     .modern-table thead th,
     .modern-table tbody td {
         padding: 15px 12px;
@@ -455,44 +444,44 @@
     .admin-page {
         padding: 15px;
     }
-    
+
     .page-header {
         flex-direction: column;
         text-align: center;
         gap: 20px;
     }
-    
+
     .header-content {
         flex-direction: column;
         text-align: center;
         gap: 15px;
     }
-    
+
     .table-header {
         flex-direction: column;
         gap: 15px;
         text-align: center;
     }
-    
+
     .filter-buttons {
         justify-content: center;
     }
-    
+
     .modern-table-container {
         overflow-x: auto;
         -webkit-overflow-scrolling: touch;
     }
-    
+
     .modern-table {
         min-width: 600px;
         font-size: 0.85rem;
     }
-    
+
     .modern-table thead th,
     .modern-table tbody td {
         padding: 12px 10px;
     }
-    
+
     .message-text {
         max-width: 150px;
     }
@@ -548,7 +537,6 @@
     font-weight: 500;
 }
 
-/* Service Cell Styling */
 .service-cell {
     display: flex;
     align-items: flex-start;
@@ -622,14 +610,8 @@
 }
 
 @keyframes modalSlideIn {
-    from {
-        opacity: 0;
-        transform: translateY(-30px) scale(0.95);
-    }
-    to {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+    from { opacity: 0; transform: translateY(-30px) scale(0.95); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
 }
 
 .modal-header {
@@ -701,9 +683,6 @@
     font-size: 1.1rem;
     font-weight: 600;
     margin-bottom: 15px;
-    display: flex;
-    align-items: center;
-    gap: 8px;
 }
 
 .services-grid {
@@ -774,33 +753,32 @@
     font-size: 1.3rem;
 }
 
-/* Responsive Modal */
 @media (max-width: 768px) {
     .services-modal {
         width: 95%;
         max-height: 90vh;
     }
-    
+
     .modal-header {
         padding: 15px 20px;
     }
-    
+
     .modal-header h3 {
         font-size: 1.1rem;
     }
-    
+
     .modal-body {
         padding: 20px;
     }
-    
+
     .booking-info-header {
         padding: 15px;
     }
-    
+
     .service-item {
         padding: 12px;
     }
-    
+
     .service-details {
         flex-direction: column;
         align-items: flex-start;
@@ -919,114 +897,36 @@
     box-shadow: 0 0 0 2px rgba(228, 54, 54, 0.1);
 }
 
-/* Responsive adjustments for booking table */
 @media (max-width: 1400px) {
-    .booking-table {
-        font-size: 0.85rem;
-    }
-    
-    .problem-cell {
-        max-width: 120px;
-    }
-    
-    .mechanic-cell {
-        min-width: 160px;
-    }
+    .booking-table { font-size: 0.85rem; }
+    .problem-cell { max-width: 120px; }
+    .mechanic-cell { min-width: 160px; }
+    .history-table { font-size: 0.85rem; }
+    .mechanic-history-cell { min-width: 130px; }
 }
 
 @media (max-width: 1200px) {
-    .booking-table {
-        font-size: 0.8rem;
-    }
-    
+    .booking-table { font-size: 0.8rem; }
     .modern-table thead th,
-    .modern-table tbody td {
-        padding: 12px 8px;
-    }
-    
-    .customer-avatar {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
-    }
-    
-    .problem-cell {
-        max-width: 100px;
-    }
-    
-    .mechanic-cell {
-        min-width: 140px;
-    }
+    .modern-table tbody td { padding: 12px 8px; }
+    .customer-avatar { width: 30px; height: 30px; font-size: 0.8rem; }
+    .problem-cell { max-width: 100px; }
+    .mechanic-cell { min-width: 140px; }
+    .history-table { font-size: 0.8rem; }
+    .mechanic-history-cell { min-width: 120px; }
+    .status-history-cell { min-width: 100px; }
 }
 
-/* History Table Specific Styling */
-.history-table {
-    font-size: 0.9rem;
-}
-
-.mechanic-history-cell {
-    min-width: 150px;
-}
-
-.status-history-cell {
-    min-width: 120px;
-}
-
-.status-history-cell .status-badge {
-    justify-content: center;
-    margin-bottom: 0;
-}
-
-/* Responsive adjustments for history table */
-@media (max-width: 1400px) {
-    .history-table {
-        font-size: 0.85rem;
-    }
-    
-    .mechanic-history-cell {
-        min-width: 130px;
-    }
-}
-
-@media (max-width: 1200px) {
-    .history-table {
-        font-size: 0.8rem;
-    }
-    
-    .mechanic-history-cell {
-        min-width: 120px;
-    }
-    
-    .status-history-cell {
-        min-width: 100px;
-    }
-}
+/* History Table */
+.history-table { font-size: 0.9rem; }
+.mechanic-history-cell { min-width: 150px; }
+.status-history-cell { min-width: 120px; }
+.status-history-cell .status-badge { justify-content: center; margin-bottom: 0; }
 
 @media (max-width: 480px) {
-    .header-text h1 {
-        font-size: 1.5rem;
-    }
-    
-    .stats-number {
-        font-size: 1.5rem;
-    }
-    
-    .modern-table {
-        min-width: 500px;
-        font-size: 0.8rem;
-    }
-    
-    .user-avatar,
-    .contact-avatar {
-        width: 35px;
-        height: 35px;
-        font-size: 0.9rem;
-    }
-    
-    .user-number,
-    .contact-number {
-        width: 30px;
-        height: 30px;
-        font-size: 0.8rem;
-    }
+    .header-text h1 { font-size: 1.5rem; }
+    .stats-number { font-size: 1.5rem; }
+    .modern-table { min-width: 500px; font-size: 0.8rem; }
+    .user-avatar, .contact-avatar { width: 35px; height: 35px; font-size: 0.9rem; }
+    .user-number, .contact-number { width: 30px; height: 30px; font-size: 0.8rem; }
 }

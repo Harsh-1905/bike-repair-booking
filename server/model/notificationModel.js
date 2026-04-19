@@ -13,6 +13,8 @@ const notificationSchema = new mongoose.Schema({
             "booking_confirmed", 
             "booking_in_progress",
             "booking_completed",
+            "slot_booking_confirmed",
+            "slot_reminder",
             "order_confirmed",
             "order_processing",
             "order_shipped",

@@ -3,16 +3,12 @@ import api from "../../Api/axios";
 import { showSuccess, showError } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
-    faMotorcycle, 
-    faUser, 
-    faCalendarAlt, 
+    faMotorcycle,  
     faWrench, 
     faCheckCircle,
     faClock,
     faExclamationTriangle,
     faSpinner,
-    faRupeeSign,
-    faCommentDots,
     faEye,
     faTimes,
     faList
@@ -76,26 +72,17 @@ const BookingTable = ({ isCollapsed }) => {
     const assignMechanic = async (bookingId, mechanicId) => {
         try {
             await api.put(`/booking/${bookingId}`, { mechanic_id: mechanicId });
+            // Find the full mechanic object so it displays immediately
+            const selectedMechanic = mechanics.find(m => m._id === mechanicId);
             setBookings(prev =>
                 prev.map(b =>
-                    b._id === bookingId ? { ...b, mechanic_id: mechanicId } : b
+                    b._id === bookingId ? { ...b, mechanic_id: selectedMechanic || mechanicId } : b
                 )
             );
             showSuccess("Mechanic assigned successfully");
         } catch (err) {
             console.error(err);
             showError("Failed to assign mechanic");
-        }
-    };
-
-    const getStatusIcon = (status) => {
-        switch (status) {
-            case "Pending": return faExclamationTriangle;
-            case "Confirmed": return faCheckCircle;
-            case "In Progress": return faSpinner;
-            case "Completed": return faCheckCircle;
-            case "Cancelled": return faExclamationTriangle;
-            default: return faClock;
         }
     };
 

@@ -37,7 +37,7 @@
 .filter-btn.active {
     background: #E43636;
     border-color: #E43636;
-    color: #fff;
+    color: #000000;
 }
 
 @media (max-width: 768px) {

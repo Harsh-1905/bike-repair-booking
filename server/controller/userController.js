@@ -2,7 +2,8 @@ import User from "../model/userModel.js";
 import Booking from "../model/bookModel.js";
 import Contact from "../model/contactmodel.js";
 import bcrypt from "bcryptjs";
-import { createBookingNotification } from "./notificationController.js";
+import { createBookingNotification, createSlotBookingNotification } from "./notificationController.js";
+import slotManager from "../utils/slotManager.js";
 
 
 
@@ -161,8 +162,49 @@ export const createBooking = async (req, res) => {
 
         // ✅ If no duplicate, create booking
         const newBooking = new Booking(req.body);
-
         const savedBooking = await newBooking.save();
+
+        // 🎯 Create slot notification for the user
+        try {
+            if (savedBooking.user_id && savedBooking.date) {
+                // Determine service type for slot calculation
+                let serviceType = "general"; // default
+                if (savedBooking.bikeService === "All-Over Service") {
+                    serviceType = "all-over";
+                } else if (savedBooking.bikeService === "Customize Service") {
+                    serviceType = "custom";
+                }
+
+                // Find available slot for this booking
+                const bookingDate = new Date(savedBooking.date).toISOString().split('T')[0];
+                await slotManager.initializeDate(bookingDate);
+                const availableSlot = await slotManager.findAvailableSlot(bookingDate, serviceType);
+
+                if (availableSlot) {
+                    // Book the slot
+                    const bookingResult = await slotManager.bookSlot(bookingDate, availableSlot, serviceType);
+                    const reportingTime = bookingResult.notifyTime;
+
+                    // Create notification
+                    await createSlotBookingNotification(
+                        savedBooking.user_id,
+                        bookingResult.slotTime,
+                        reportingTime,
+                        bookingDate,
+                        savedBooking.bikeService
+                    );
+
+                    console.log(`📱 Slot notification created for booking: ${savedBooking._id}`);
+                    console.log(`🎯 Assigned to ${availableSlot.toUpperCase()} (${bookingResult.slotTime})`);
+                    console.log(`🔔 Reporting time: ${reportingTime}`);
+                } else {
+                    console.log(`⚠️ No available slots for ${bookingDate}, notification not created`);
+                }
+            }
+        } catch (notificationError) {
+            console.error("❌ Failed to create slot notification:", notificationError);
+            // Don't fail the booking if notification fails
+        }
 
         res.status(201).json({
             success: true,
