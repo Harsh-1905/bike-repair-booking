@@ -1,15 +1,15 @@
 import React, { useEffect, useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
-    faUsers, faCalendarCheck, faTools, faRupeeSign, faClock, faCheckCircle,
-    faShoppingCart, faTimes, faArrowUp, faArrowDown,
-    faBars, faUser, faChartLine, faEdit
+    faUsers, faCalendarCheck, faRupeeSign,
+    faShoppingCart, faArrowUp, faArrowDown,
+    faBars, faUser, faChartLine, faClock, faTimes, faCheckCircle, faTools
 } from '@fortawesome/free-solid-svg-icons';
 import api from '../../Api/axios';
 import './modern-dashboard.css';
 
 const StatCard = ({ title, value, icon, bgColor, subtitle, trend }) => (
-    <div className="col-xl-2 col-lg-4 col-md-6 col-sm-6 mb-4">
+    <div className="col-xl-3 col-lg-6 col-md-6 col-sm-6 mb-4">
         <div className="stat-card" style={{ '--card-color': bgColor }}>
             <div className="stat-card-content">
                 <div className="stat-icon">
@@ -352,20 +352,8 @@ const AdminDashboard = ({ isCollapsed, toggleSidebar }) => {
                         <div className="row">
                             <StatCard title="Total Users" value={dashboardData.totalUsers} icon={faUsers} bgColor="#3b82f6" subtitle="Registered customers" trend={12} />
                             <StatCard title="Total Bookings" value={dashboardData.totalBookings} icon={faCalendarCheck} bgColor="#10b981" subtitle="Service bookings" trend={8} />
-                            <StatCard title="Total Mechanics" value={dashboardData.totalMechanics} icon={faTools} bgColor="#f59e0b" subtitle="Available mechanics" trend={0} />
                             <StatCard title="Total Orders" value={dashboardData.totalOrders} icon={faShoppingCart} bgColor="#8b5cf6" subtitle="Product orders" trend={5} />
-                        </div>
-
-                        <div className="row mt-3">
-                            <StatCard title="Delivered Orders" value={dashboardData.deliveredOrders} icon={faCheckCircle} bgColor="#06b6d4" subtitle="Completed deliveries" trend={18} />
-                            <StatCard title="Total Revenue" value={`₹${dashboardData.totalRevenue.toLocaleString()}`} icon={faRupeeSign} bgColor="#ef4444" subtitle="Total earnings" trend={15} />
-                            <StatCard title="Pending Bookings" value={dashboardData.pendingBookings} icon={faClock} bgColor="#f97316" subtitle="Awaiting service" trend={-5} />
-                            <StatCard title="Completed Services" value={dashboardData.completedServices} icon={faCheckCircle} bgColor="#22c55e" subtitle="Finished bookings" trend={20} />
-                        </div>
-
-                        <div className="row mt-3">
-                            <StatCard title="Pending Orders" value={dashboardData.pendingOrders} icon={faClock} bgColor="#f59e0b" subtitle="Orders to process" trend={-2} />
-                            <StatCard title="New Registrations" value={dashboardData.recentRegistrations} icon={faUser} bgColor="#14b8a6" subtitle="Last 7 days" trend={25} />
+                            <StatCard title="Total Mechanics" value={dashboardData.totalMechanics} icon={faTools} bgColor="#f59e0b" />
                         </div>
 
                         <div className="row mt-5">

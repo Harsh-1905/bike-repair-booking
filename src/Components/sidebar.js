@@ -4,7 +4,7 @@ import api from "../Api/axios";
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import {
     faHome, faUsers, faCalendarCheck, faAddressBook, faUserCircle,
-    faSignOutAlt, faShoppingBag, faPlus, faUserPlus, faWrench, faHistory
+    faSignOutAlt, faShoppingBag, faPlus, faUserPlus, faWrench, faHistory, faCogs
 } from "@fortawesome/free-solid-svg-icons";
 import '../index.css';
 
@@ -80,6 +80,7 @@ const Sidebar = ({ isCollapsed, toggleSidebar, setUser }) => {
                 <SidebarItem icon={faHistory} text="Order History" to="/admin/order-history" isActive={activePath === '/admin/order-history'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faPlus} text="Add Product" to="/admin/add-product" isActive={activePath === '/admin/add-product'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserPlus} text="Add Mechanic" to="/admin/add-mechanic" isActive={activePath === '/admin/add-mechanic'} isCollapsed={isCollapsed} />
+                <SidebarItem icon={faCogs} text="Service Management" to="/admin/service-management" isActive={activePath === '/admin/service-management'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faAddressBook} text="Contact Details" to="/contactdetails" isActive={activePath === '/contactdetails'} isCollapsed={isCollapsed} />
                 <SidebarItem icon={faUserCircle} text="Profile" to="/profile" isActive={activePath === '/profile'} isCollapsed={isCollapsed} />
                 

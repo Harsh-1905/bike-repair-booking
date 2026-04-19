@@ -37,13 +37,13 @@ const Profile = ({ isCollapsed }) => {
 
     const handleSave = async () => {
         const userId = userData._id;
-        
         try {
-            const res = await api.put(`/user/${userId}`, formData);
+            const res = await api.put(`/user/${userId}`, {
+                contactNumber: formData.contactNumber,
+                address: formData.address
+            });
             if (res.data.success) {
                 showSuccess("Profile updated successfully!");
-                
-                // Update userData and localStorage with the new data
                 const updatedUser = res.data.user;
                 setUserData(updatedUser);
                 setFormData(updatedUser);
@@ -110,33 +110,14 @@ const Profile = ({ isCollapsed }) => {
                                 <div className="profile-row">
                                     <label>Full Name</label>
                                     <div className="value">
-                                        {isEditing ? (
-                                            <input
-                                                className="form-control"
-                                                name="fullName"
-                                                value={formData.fullName || ""}
-                                                onChange={handleChange}
-                                            />
-                                        ) : (
-                                            <span>{userData.fullName}</span>
-                                        )}
+                                        <span>{userData.fullName}</span>
                                     </div>
                                 </div>
 
                                 <div className="profile-row">
                                     <label>Email</label>
                                     <div className="value">
-                                        {isEditing ? (
-                                            <input
-                                                className="form-control"
-                                                name="email"
-                                                type="email"
-                                                value={formData.email || ""}
-                                                onChange={handleChange}
-                                            />
-                                        ) : (
-                                            <span>{userData.email}</span>
-                                        )}
+                                        <span>{userData.email}</span>
                                     </div>
                                 </div>
 

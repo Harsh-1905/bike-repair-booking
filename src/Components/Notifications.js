@@ -36,12 +36,16 @@ const Notifications = ({ user }) => {
     const fetchNotifications = async () => {
         try {
             setLoading(true);
+            console.log('🔍 Fetching notifications for user:', user);
             const response = await api.get('/notifications');
+            console.log('📨 Notifications response:', response.data);
             if (response.data.success) {
                 setNotifications(response.data.notifications);
+                console.log('✅ Notifications loaded:', response.data.notifications.length);
             }
         } catch (error) {
-            console.error('Error fetching notifications:', error);
+            console.error('❌ Error fetching notifications:', error);
+            console.error('❌ Error response:', error.response?.data);
         } finally {
             setLoading(false);
         }
@@ -49,12 +53,16 @@ const Notifications = ({ user }) => {
 
     const fetchUnreadCount = async () => {
         try {
+            console.log('🔍 Fetching unread count...');
             const response = await api.get('/notifications/unread-count');
+            console.log('📊 Unread count response:', response.data);
             if (response.data.success) {
                 setUnreadCount(response.data.count);
+                console.log('✅ Unread count:', response.data.count);
             }
         } catch (error) {
-            console.error('Error fetching unread count:', error);
+            console.error('❌ Error fetching unread count:', error);
+            console.error('❌ Error response:', error.response?.data);
         }
     };
 
@@ -92,6 +100,8 @@ const Notifications = ({ user }) => {
             case 'booking_confirmed':
             case 'booking_in_progress':
             case 'booking_completed':
+            case 'slot_booking_confirmed':
+            case 'slot_reminder':
                 return faWrench;
             case 'order_confirmed':
             case 'order_processing':
@@ -108,11 +118,14 @@ const Notifications = ({ user }) => {
             case 'mechanic_assigned':
                 return '#17a2b8';
             case 'booking_confirmed':
+            case 'slot_booking_confirmed':
                 return '#28a745';
             case 'booking_in_progress':
                 return '#007bff';
             case 'booking_completed':
                 return '#28a745';
+            case 'slot_reminder':
+                return '#ffc107';
             case 'order_confirmed':
                 return '#28a745';
             case 'order_processing':

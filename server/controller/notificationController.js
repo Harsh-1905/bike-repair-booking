@@ -138,6 +138,20 @@ const getAdminNotifications = async (req, res) => {
 };
 
 // Helper functions for creating specific notifications
+const createSlotBookingNotification = async (userId, slotTime, reportingTime, date, serviceType) => {
+    const title = "Workshop Reminder";
+    const message = `You can put your bike on workshop at ${reportingTime} for your ${slotTime} slot on ${date}.`;
+    
+    return await createNotification(userId, "slot_booking_confirmed", title, message);
+};
+
+const createSlotReminderNotification = async (userId, reportingTime, slotTime, date) => {
+    const title = "Workshop Reminder";
+    const message = `You can put your bike on workshop at ${reportingTime} for your ${slotTime} slot today (${date}).`;
+    
+    return await createNotification(userId, "slot_reminder", title, message);
+};
+
 const createBookingNotification = async (userId, type, bookingId, mechanicName = null) => {
     let title, message;
     
@@ -267,6 +281,8 @@ export {
     markAllAsRead,
     getUnreadCount,
     getAdminNotifications,
+    createSlotBookingNotification,
+    createSlotReminderNotification,
     createBookingNotification,
     createOrderNotification,
     createAdminProfileNotification,

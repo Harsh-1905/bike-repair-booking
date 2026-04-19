@@ -13,6 +13,8 @@ import orderRoute from "./route/orderRoute.js";
 import mechanicRoute from "./route/mechanicRoute.js";
 import paymentRoute from "./route/paymentRoute.js";
 import notificationRoute from "./route/notificationRoute.js";
+import slotBookingRoute from "./route/slotBookingRoute.js";
+import serviceRoute from "./route/serviceRoute.js";
 
 const app = express();
 
@@ -43,6 +45,8 @@ app.use("/api", orderRoute);
 app.use("/api", mechanicRoute);
 app.use("/api/payment", paymentRoute);
 app.use("/api/notifications", notificationRoute);
+app.use("/api", slotBookingRoute);
+app.use("/api/services", serviceRoute);
 app.use("/uploads", express.static("uploads"));
 app.use("/api", passwordRoutes);
 
@@ -53,5 +57,9 @@ mongoose.connect(process.env.MONGO_URL)
 const PORT = process.env.PORT || 8000;
 app.listen(PORT, () => {
     console.log(`🚀 Server running on port ${PORT}`);
+    console.log(`📍 Slot Booking API available at:`);
+    console.log(`   POST http://localhost:${PORT}/api/book-slot`);
+    console.log(`   GET  http://localhost:${PORT}/api/slots/:date`);
+    console.log(`   GET  http://localhost:${PORT}/api/booking-info`);
 });
 

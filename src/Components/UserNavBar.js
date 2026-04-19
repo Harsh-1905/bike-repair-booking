@@ -46,9 +46,6 @@ const UserNavBar = ({ user, handleLogout }) => {
                             <Link className="nav-link navlinktexts text-white" to="/my-orders">My Orders</Link>
                         </li>
                         <li className="nav-item">
-                            <Link className="nav-link navlinktexts text-white" to="/notifications">Notifications</Link>
-                        </li>
-                        <li className="nav-item">
                             <Link className="nav-link navlinktexts text-white" to="/cart">Cart</Link>
                         </li>
                         {/* Notifications */}

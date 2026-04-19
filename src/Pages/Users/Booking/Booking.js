@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
+import api from "../../../Api/axios";
 import "./user-booking.css";
 import ServiceBill from "./ServiceBill";
 
@@ -78,32 +79,41 @@ function UserBooking() {
         setMinDate(today.toISOString().split("T")[0]);
 
         const params = new URLSearchParams(location.search);
-
         const service = params.get("service");
         const price = params.get("price");
-        const services = params.get("services"); // NEW
+        const services = params.get("services");
 
         if (service) {
-
             setBikeService(service);
 
-            if (service === "All-Over Service") {
-                setServicePrice(999);
-            }
-
-            if (service === "General Service") {
-                setServicePrice(499);
-            }
-
             if (service === "Customize Service") {
-
+                // Customize price comes from selected services total, use URL param
                 setServicePrice(Number(price) || 0);
-
                 if (services) {
                     const parsedServices = JSON.parse(decodeURIComponent(services));
                     setSelectedServices(parsedServices);
                 }
-
+            } else {
+                // For General / All-Over — fetch live price from DB
+                api.get("/services/packages")
+                    .then(res => {
+                        if (res.data.success) {
+                            const match = res.data.packages.find(
+                                p => p.name.toLowerCase() === service.toLowerCase().replace("-", " ").trim()
+                                  || p.name.toLowerCase() === service.toLowerCase()
+                            );
+                            if (match) {
+                                setServicePrice(match.price);
+                            } else {
+                                // fallback to URL param price if no match
+                                setServicePrice(Number(price) || 0);
+                            }
+                        }
+                    })
+                    .catch(() => {
+                        // fallback to URL param price on error
+                        setServicePrice(Number(price) || 0);
+                    });
             }
         }
 

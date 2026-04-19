@@ -1,10 +1,31 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import api from "../../../Api/axios";
 import "./service-selection.css";
 
 function ServiceSelection() {
 
     const navigate = useNavigate();
+    const [packages, setPackages] = useState({});
+    const [loading, setLoading] = useState(true);
+
+    useEffect(() => {
+        api.get("/services/packages")
+            .then(res => {
+                if (res.data.success) {
+                    // Map by name for easy lookup
+                    const map = {};
+                    res.data.packages.forEach(pkg => {
+                        map[pkg.name] = pkg;
+                    });
+                    setPackages(map);
+                }
+            })
+            .catch(err => console.error("Error fetching packages:", err))
+            .finally(() => setLoading(false));
+    }, []);
+
+    const getPrice = (name) => packages[name]?.price ?? "...";
 
     const bookService = (service, price) => {
         navigate(`/booking?service=${service}&price=${price}`);
@@ -22,7 +43,7 @@ function ServiceSelection() {
 
                         <div className="service-header">
                             <h3>All Over Service</h3>
-                            <div className="price">₹999</div>
+                            <div className="price">{loading ? "..." : `₹${getPrice("All-over Service")}`}</div>
                         </div>
 
                         <ul className="service-list">
@@ -36,7 +57,7 @@ function ServiceSelection() {
 
                         <button
                             className="book-btn"
-                            onClick={() => bookService("All-Over Service", 999)}
+                            onClick={() => bookService("All-Over Service", getPrice("All-over Service"))}
                         >
                             Book Now
                         </button>
@@ -48,7 +69,7 @@ function ServiceSelection() {
 
                         <div className="service-header">
                             <h3>General Service</h3>
-                            <div className="price">₹499</div>
+                            <div className="price">{loading ? "..." : `₹${getPrice("General Service")}`}</div>
                         </div>
 
                         <ul className="service-list">
@@ -61,7 +82,7 @@ function ServiceSelection() {
 
                         <button
                             className="book-btn"
-                            onClick={() => bookService("General Service", 499)}
+                            onClick={() => bookService("General Service", getPrice("General Service"))}
                         >
                             Book Now
                         </button>

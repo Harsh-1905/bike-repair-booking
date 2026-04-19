@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import api from "../../Api/axios";
 import { showSuccess, showError } from "../../utils/toast";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faEye, faEdit } from "@fortawesome/free-solid-svg-icons";
+import { faEdit } from "@fortawesome/free-solid-svg-icons";
 import "./orders-table.css";
 
 const OrdersTable = ({ isCollapsed }) => {
@@ -146,7 +146,7 @@ const OrdersTable = ({ isCollapsed }) => {
                                 </td>
                                 <td>
                                     <div className="action-buttons">
-                                        <button
+                                        {/* <button
                                             className="btn-view"
                                             onClick={() => {
                                                 setSelectedOrder(order);
@@ -155,7 +155,7 @@ const OrdersTable = ({ isCollapsed }) => {
                                             title="View Details"
                                         >
                                             <FontAwesomeIcon icon={faEye} />
-                                        </button>
+                                        </button> */}
                                         <button
                                             className="btn-edit"
                                             onClick={() => openStatusModal(order)}

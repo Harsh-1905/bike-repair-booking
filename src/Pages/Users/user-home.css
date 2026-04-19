@@ -88,8 +88,8 @@
 
 .hero-image {
     position: relative;
-    height: 250px;
-    width:250px;
+    height: 400px;
+    width: 450px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -104,7 +104,7 @@
     display: flex;
     align-items: center;
     gap: 12px;
-    animation: float 3s ease-in-out infinite;
+    animation: float 3s ease-out infinite;
 }
 
 .floating-card svg {
@@ -119,21 +119,31 @@
 }
 
 .floating-card.card-1 {
-    top: 20%;
-    left: 10%;
+    top: 10%;
+    left: 5%;
     animation-delay: 0s;
 }
 
 .floating-card.card-2 {
-    top: 50%;
-    right: 15%;
+    top: 45%;
+    right: 5%;
     animation-delay: 1s;
 }
 
 .floating-card.card-3 {
-    bottom: 15%;
-    left: 25%;
+    bottom: 10%;
+    left: 30%;
     animation-delay: 2s;
+}
+.floating-card.card-4 {
+    bottom: 30%;
+    left: 10%;
+    animation-delay: 3s;
+}
+.floating-card.card-5 {
+    top: 20%;
+    right: 10%;
+    animation-delay: 4s;
 }
 
 @keyframes float {
@@ -459,7 +469,8 @@
     }
 
     .hero-image {
-        height: 250px;
+        height: 300px;
+        width: 300px;
     }
 
     .floating-card {
@@ -486,5 +497,148 @@
     .features-grid,
     .actions-grid {
         grid-template-columns: 1fr;
+    }
+}
+
+/* FOOTER STYLES */
+.footer {
+    background: linear-gradient(135deg, #fefefe 0%, #ffffff 100%);
+    color: white;
+    padding: 50px 0 0;
+    margin-top: 50px;
+}
+
+.footer-logo {
+    font-size: 2rem;
+    font-weight: 800;
+    color: #E43636;
+    margin-bottom: 15px;
+}
+
+.footer-text {
+    color: #000000;
+    line-height: 1.6;
+    margin-bottom: 20px;
+}
+
+.footer-heading {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 20px;
+    color: #000000;
+    position: relative;
+}
+
+.footer-heading::after {
+    content: '';
+    position: absolute;
+    bottom: -8px;
+    left: 0;
+    width: 30px;
+    height: 3px;
+    background: #E43636;
+}
+
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 0.8rem;
+}
+
+.footer-links button,
+.footer-links a {
+    color: #000000;
+    text-decoration: none;
+    background: none;
+    border: none;
+    padding: 0;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.footer-links button:hover,
+.footer-links a:hover {
+    color: #E43636;
+    transform: translateX(5px);
+}
+
+.footer-contact {
+    color: #000000;
+    line-height: 1.8;
+    margin-bottom: 15px;
+}
+
+.contact-icons {
+    display: flex;
+    gap: 15px;
+}
+
+.contact-icons a {
+    width: 40px;
+    height: 40px;
+    background: rgba(228, 54, 54, 0.1);
+    border: 2px solid #E43636;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: #E43636;
+    font-size: 1.1rem;
+    transition: all 0.3s ease;
+}
+
+.contact-icons a:hover {
+    background: #E43636;
+    color: white;
+    transform: translateY(-3px);
+}
+
+.footer-bottom {
+    background: rgba(0, 0, 0, 0.2);
+    padding: 20px 0;
+    margin-top: 40px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.footer-bottom p {
+    margin: 0;
+    color: #95a5a6;
+    font-size: 0.9rem;
+}
+
+/* Footer Responsive */
+@media (max-width: 768px) {
+    .footer {
+        padding: 30px 0 0;
+    }
+    
+    .footer-logo {
+        text-align: center;
+    }
+    
+    .footer-text {
+        text-align: center;
+    }
+    
+    .contact-icons {
+        justify-content: center;
+    }
+    
+    .footer-heading {
+        text-align: center;
+        margin-top: 30px;
+    }
+    
+    .footer-links {
+        text-align: center;
+    }
+    
+    .footer-contact {
+        text-align: center;
     }
 }

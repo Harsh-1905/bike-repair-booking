@@ -3,7 +3,8 @@ import api from "../../Api/axios";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { 
     faMotorcycle, faShoppingBag, faCalendarCheck, 
-    faTools, faBolt, faUser, faHistory, faStore
+    faTools, faBolt, faUser, faHistory, faStore,
+    faGlobe, faEnvelope, faPhone, faMapMarkerAlt,faBoltLightning,faLightbulb
 } from "@fortawesome/free-solid-svg-icons";
 import { useNavigate } from "react-router-dom";
 import "./user-home.css";
@@ -103,6 +104,14 @@ const UserHome = () => {
                         <div className="floating-card card-3">
                             <FontAwesomeIcon icon={faShoppingBag} />
                             <span>Quality Parts</span>
+                        </div>
+                        <div className="floating-card card-4">
+                            <FontAwesomeIcon icon={faLightbulb} />
+                            <span>Accessories</span>
+                        </div>
+                        <div className="floating-card card-5">
+                            <FontAwesomeIcon icon={faBoltLightning} />
+                            <span>Quick Service</span>
                         </div>
                     </div>
                 </div>
@@ -311,6 +320,74 @@ const UserHome = () => {
                     </div>
                 </div>
             </div>
+
+            {/* Footer */}
+            <footer className="footer">
+                <div className="container">
+                    <div className="row gy-4">
+                        {/* Brand Info */}
+                        <div className="col-md-4">
+                            <h4 className="footer-logo">BikeCare</h4>
+                            <p className="footer-text">
+                                Your trusted partner for bike maintenance and parts. 
+                                Professional service, quality products, seamless experience.
+                            </p>
+                        </div>
+
+                        {/* Dashboard Links */}
+                        <div className="col-md-2">
+                            <h5 className="footer-heading">Dashboard</h5>
+                            <ul className="footer-links">
+                                <li><button onClick={() => navigate('/userhomepage')}>Home</button></li>
+                                <li><button onClick={() => navigate('/profile')}>My Profile</button></li>
+                                <li><button onClick={() => navigate('/tracking')}>Track Service</button></li>
+                                <li><button onClick={() => navigate('/my-orders')}>My Orders</button></li>
+                                <li><button onClick={() => navigate('/history')}>History</button></li>
+                            </ul>
+                        </div>
+
+                        {/* Services */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Quick Actions</h5>
+                            <ul className="footer-links">
+                                <li><button onClick={() => navigate('/serviceselection')}>Book Service</button></li>
+                                <li><button onClick={() => navigate('/store')}>Shop Products</button></li>
+                                <li><button onClick={() => navigate('/ourservices')}>Our Services</button></li>
+                                <li><button onClick={() => navigate('/contactus')}>Contact Support</button></li>
+                            </ul>
+                        </div>
+
+                        {/* Contact */}
+                        <div className="col-md-3">
+                            <h5 className="footer-heading">Support</h5>
+                            <p className="footer-contact">
+                                📍 Bardoli-Isroli Road, Gujarat, India <br />
+                                📞 +91 99252 99383 <br />
+                                📞 +91 76228 99383
+                            </p>
+                            <div className="contact-icons mt-3">
+                                <a href="#" aria-label="Website">
+                                    <FontAwesomeIcon icon={faGlobe} />
+                                </a>
+                                <a href="#" aria-label="Email">
+                                    <FontAwesomeIcon icon={faEnvelope} />
+                                </a>
+                                <a href="#" aria-label="Phone">
+                                    <FontAwesomeIcon icon={faPhone} />
+                                </a>
+                                <a href="#" aria-label="Location">
+                                    <FontAwesomeIcon icon={faMapMarkerAlt} />
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="footer-bottom text-center">
+                    <p>© 2026 BikeCare. All Rights Reserved. | Welcome back, {user?.fullName}!</p>
+                </div>
+            </footer>
         </div>
     );
 
